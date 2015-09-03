@@ -1,0 +1,20 @@
+---
+- name: Download stress profile from git
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: git clone profile_git
+      git: repo={{profile_git}} dest={{profile_dir}}
+      when: not profile_git == false
+
+- name: upload stress file to loaders
+  hosts: "CassandraLoadgen"
+  user: "{{login_user}}"
+  tasks:
+    - name: Creates directory
+      file: path="~/{{profile_file | dirname }}" state=directory
+      when: not profile_file == false
+    - name: upload file
+      copy: src="{{profile_dir}}/{{profile_file}}" dest=~/{{profile_file}}
+      when: not profile_file == false

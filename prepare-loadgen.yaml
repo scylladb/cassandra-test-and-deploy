@@ -1,0 +1,7 @@
+- name: Prepare load generator nodes
+  hosts: CassandraLoadgen
+  user: "{{login_user}}"
+  roles:
+    - { role: cassandra, sudo: yes, run_server: false }
+    - loader
+    - { role: collectd-client, sudo: yes, tag: "stress", node: "loader-{{groups.CassandraLoadgen.index(inventory_hostname)}}" }

@@ -1,0 +1,15 @@
+- name: Prepare Cassandra nodes
+  hosts: NewCassandra
+  user: "{{login_user}}"
+  roles:
+    - { role: cassandra, sudo: yes, run_server: true}
+    - { role: collectd-client, sudo: yes, tag: "stress" }
+
+- name: Run Cassandra nodes
+  hosts: NewCassandra
+  serial: 1
+  user: "{{login_user}}"
+  tasks:
+    - include: roles/cassandra/tasks/start.yaml
+      when: not stopped
+

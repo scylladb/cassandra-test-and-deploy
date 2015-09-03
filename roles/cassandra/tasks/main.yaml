@@ -1,0 +1,51 @@
+---
+- apt_repository: repo='deb http://debian.datastax.com/community stable main' state=present
+- apt_key: url=http://debian.datastax.com/debian/repo_key state=present
+- apt: name=cassandra={{cassandra_ver}} state=installed update-cache=yes
+  when: install
+
+# stop the service and clean data with wrong config file
+- service: name=cassandra enabled=yes pattern=cassandra state=stopped
+- shell: rm -rf /var/lib/cassandra
+
+# used only when adding a new node to a running cluster
+- command: echo "{{ hostvars[item].ec2_private_ip_address }}"
+  with_items: groups.SeedsExIP
+  register: output
+  changed_when: no
+  when: add_node
+
+- set_fact: seeds="{{ output.results|map(attribute='stdout')| join(',') }}"
+  when: add_node
+
+- set_fact: seeds="{{ groups.SeedsIp | join(',') }}"
+  when: run_server and (not add_node) and seeds is not defined
+
+- set_fact: auto_bootstrap="true"
+  when: run_server and add_node
+
+- debug: msg="{{internal_ip}}"
+
+- name: Check to see if /mnt exists
+  stat: path=/mnt
+  register: mnt
+
+- name: soft link from /var/lib/cassansdra to /mnt/cassandra
+  file:
+    dest=/var/lib/cassandra
+    src=/mnt/cassandra
+    state=link
+    force=yes
+  when: mnt.stat.exists == true
+
+- name: create /mnt/cassandra
+  file:
+    path: /mnt/cassandra
+    state: directory
+    owner: "cassandra"
+    group: "cassandra"
+    mode: "u+rwx,g=r,o=r"
+  when: mnt.stat.exists == true
+
+- action: template src=cassandra.yaml dest=/etc/cassandra/cassandra.yaml mode="u=rw,g=r,o=r"
+  when: run_server # Do not upload the cassandra configuration, with the seed to the loader

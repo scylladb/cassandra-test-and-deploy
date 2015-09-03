@@ -1,0 +1,3 @@
+---
+- service: name=cassandra enabled=yes pattern=cassandra state=stopped
+- shell: rm -rf /var/lib/cassandra/*

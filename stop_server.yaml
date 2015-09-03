@@ -1,0 +1,7 @@
+---
+- name: Stop Service
+  hosts: "Cassandra:&Origin"
+  user: "{{login_user}}"
+  tasks:
+    - { include: roles/cassandra/tasks/stop.yaml }
+

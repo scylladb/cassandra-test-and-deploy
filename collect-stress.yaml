@@ -1,0 +1,12 @@
+---
+- name: collect stress results
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - shell: ./sum-results.sh {{home_path}}{{output_format}}
+    - shell: ./avg-from-sum.sh {{home_path}}{{output_format}}
+
+    - include: upload-to-s3.yaml suffix="sum"
+    - include: upload-to-s3.yaml suffix="avg"
+    - include: dump-parameters.yaml

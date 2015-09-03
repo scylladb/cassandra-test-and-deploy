@@ -1,0 +1,17 @@
+---
+- name: Gather facts
+  action: ec2_facts
+
+- apt: name={{ item }} state=present update_cache=yes cache_valid_time=600
+  with_items:
+    - collectd
+  when: install
+
+- name: add libjvm.so to lib path
+  lineinfile: dest=/etc/default/collectd line="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:{{java_lib_path}}"
+
+- set_fact: node="cassandra-{{ansible_hostname }}"
+
+- action: template src=collectd-client.conf dest=/etc/collectd/collectd.conf owner=root group=root
+  notify:
+    - restart collectd

@@ -1,0 +1,4 @@
+---
+installer_key: oracle-java7-installer
+license_key: accepted-oracle-license-v1-1
+lib_path: /usr/lib/jvm/java-7-oracle/jre/lib/amd64/server

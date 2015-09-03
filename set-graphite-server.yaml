@@ -1,0 +1,6 @@
+- name: Prepare Cassandra nodes
+  hosts: "!GraphiteServer"
+  user: "{{login_user}}"
+  roles:
+    - { role: collectd-client, sudo: yes, tag: "stress" }
+

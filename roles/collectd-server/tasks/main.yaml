@@ -1,0 +1,13 @@
+---
+- name: Gather facts
+  action: ec2_facts
+
+- apt: name={{ item }} state=present update_cache=yes cache_valid_time=600
+  with_items:
+    - collectd
+
+- set_fact: node="collectd-server"
+
+- action: template src=collectd-client.conf dest=/etc/collectd/collectd.conf owner=root group=root
+  notify:
+    - restart collectd

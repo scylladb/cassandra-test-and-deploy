@@ -1,0 +1,42 @@
+---
+- include: clean_data.yaml
+- include: stress_profile.yaml
+
+- name: Run stress
+  hosts: "CassandraLoadgen"
+  user: "{{login_user}}"
+  vars:
+    iteration: 0 # overload me
+  tasks:
+
+    - local_action: shell ./ec2-get-private-ips.py {{region}} {{setup_name}} "Cassandra" | cut -f2 -d' ' | sed s/^/\'/ | sed s/$/\'/ | sed ':a;N;$!ba;s/\n/,/g'
+      register: private_ips
+      when: ip_list is not defined
+
+    - set_fact: ip_list="{{ private_ips.stdout }}"
+      when: ip_list is not defined
+
+    - debug: msg="ip_list is {{ip_list}}"
+
+    - set_fact: index={{ec2_tag_index}}
+      when: index is not defined
+
+    - set_fact: log_file="{{remote_path}}{{output_file}}.{{index}}"
+    - set_fact: range_start={{1 + (populate|int) * (index|int) }}
+    - set_fact: range_end={{(populate|int) * (1 + (index|int)) }}
+    - set_fact: range="{{range_start}}..{{range_end}}"
+    - debug: msg="client key range {{range}}"
+
+    - shell: sleep {{sleep_between_runs}}; cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}
+      when: profile_file == false
+      ignore_errors: True
+
+    - shell: sleep {{sleep_between_runs}}; cassandra-stress user profile={{profile_file}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
+      when: not profile_file == false
+      ignore_errors: True
+
+    - fetch: src={{log_file}}.{{iteration}}.data dest={{home_path}}{{output_file}}.{{index}}.{{iteration}}.data flat=yes
+      ignore_errors: True
+
+    - local_action: s3 bucket={{s3_buckt}} object={{output_file}}/{{output_file}}.{{index}}.{{iteration}} src={{home_path}}{{output_file}}.{{index}}.{{iteration}} mode=put
+      when: upload_to_s3

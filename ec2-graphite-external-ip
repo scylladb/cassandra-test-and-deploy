@@ -1,0 +1,1 @@
+ansible -i inventories/ec2/ GraphiteServer --limit "tag_user_`echo $ANSIBLE_EC2_PREFIX`" -u ubuntu -a "echo {{ec2_ip_address}}" | head -2 | tail -1

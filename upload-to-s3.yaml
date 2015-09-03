@@ -1,0 +1,7 @@
+- local_action: s3 bucket={{s3_buckt}} object={{output_file}}/{{output_file}}.{{suffix}} src={{home_path}}{{output_file}}.{{suffix}} mode=put
+  when: upload_to_s3
+  ignore_errors: True
+
+- debug: msg="not uploading results to S3. To enable upload set upload_to_s3 to True"
+  when: upload_to_s3 == false
+

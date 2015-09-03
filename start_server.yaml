@@ -1,0 +1,7 @@
+---
+- name: Start Service
+  hosts: "Cassandra:&Origin:&Stopped"
+  user: "{{login_user}}"
+  serial: 1
+  tasks:
+    - { include: roles/cassandra/tasks/start.yaml }

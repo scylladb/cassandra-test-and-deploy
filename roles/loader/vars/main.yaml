@@ -1,0 +1,5 @@
+# download cassandra stress
+cassandra_url: http://www.us.apache.org/dist/cassandra
+cassandra_ver: 2.1.2
+cassandra_file: "apache-cassandra-{{cassandra_ver}}-bin.tar.gz"
+cassandra_full_url: "{{cassandra_url}}/{{cassandra_ver}}/{{cassandra_file}}"

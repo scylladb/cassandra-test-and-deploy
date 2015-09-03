@@ -1,0 +1,18 @@
+---
+- name: Setup deb repo
+  apt_repository: repo="ppa:webupd8team/java" update_cache=yes
+
+- name: Accept license
+  debconf: name="{{installer_key}}" question='shared/{{license_key}}' value='true' vtype='select'
+  when: install
+
+- name: Install packages
+  apt: name={{item}} state=present update_cache=yes
+  with_items:
+    - oracle-java7-installer
+    - oracle-java7-set-default
+  when: install
+
+# used by collectd role
+- set_fact:
+    java_lib_path: "{{lib_path}}"

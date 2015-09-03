@@ -1,0 +1,33 @@
+---
+cluster_nodes: 2
+load_nodes: 2
+login_user: ubuntu
+add_node: false
+stopped: false
+
+# load
+load_name: run
+command: write
+command_options:
+output_format: cassandra-stress.{{command}}.{{load_name}}.{{ansible_date_time.date}}
+output_file: "{{output_format}}"
+remote_path: /home/{{login_user}}/
+home_path: /tmp/cassandra-results/
+stress_options:
+populate: 1000000
+sleep_between_runs: 60
+threads: 250
+clean_data: true
+profile_git: false
+profile_dir: /tmp/cassandra-stress-profiles/
+profile_file: false
+
+
+
+#others
+s3_buckt: cassandra.test
+upload_to_s3: false
+wait_after_adding_server: 120
+
+collect_server_ip: 127.0.0.1 #override this value to send metrics to the actual server
+install: true

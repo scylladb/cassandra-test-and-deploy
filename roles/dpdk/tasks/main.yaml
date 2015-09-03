@@ -1,0 +1,26 @@
+- name: download dpdk
+  get_url: url=http://dpdk.org/browse/dpdk/snapshot/dpdk-{{dpdk_version}}.tar.gz dest=/home/{{login_user}}/ mode=0644
+
+- name: extract dpdk
+  unarchive: src=/home/{{login_user}}/dpdk-{{dpdk_version}}.tar.gz dest=/home/{{login_user}} copy=no
+
+- command: uname -r
+  register: uname_r_result
+
+- debug: var=uname_r_result.stdout
+
+- name: dpdk require packages
+  apt:
+    name="{{item}}"
+    state=present
+    update_cache=yes
+  with_items:
+    - build-essential
+    - "linux-image-extra-{{uname_r_result.stdout}}"
+
+- copy: src=config.txt dest=/home/{{login_user}}/dpdk-{{dpdk_version}}/tools
+- name: compile and load dpdk
+  shell: ./setup.sh < config.txt
+  args:
+   chdir: /home/{{login_user}}/dpdk-{{dpdk_version}}/tools
+

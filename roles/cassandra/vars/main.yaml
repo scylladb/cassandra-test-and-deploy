@@ -1,0 +1,6 @@
+---
+cassandra_ver: 2.1.8
+cluster_name: CassandraCluster
+internal_ip: "{{ansible_all_ipv4_addresses[0]}}"
+auto_bootstrap: "false"
+num_tokens: 256

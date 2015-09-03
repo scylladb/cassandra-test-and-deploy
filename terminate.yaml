@@ -1,0 +1,34 @@
+---
+- name: Find Cassandra instance(s)
+  hosts: Cassandra
+  gather_facts: false
+  tasks:
+    - name: Create group
+      group_by: key=cassandra_nodes
+
+- hosts: cassandra_nodes
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Terminate instance(s)
+      ec2:
+        instance_ids: "{{ ec2_id }}"
+        region: "{{ region }}"
+        state: absent
+
+- name: Find CassandraLoadgen instance(s)
+  hosts: CassandraLoadgen
+  gather_facts: false
+  tasks:
+    - name: Create group
+      group_by: key=loadgen_nodes
+
+- hosts: loadgen_nodes
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Terminate instance(s)
+      ec2:
+        instance_ids: "{{ ec2_id }}"
+        region: "{{ region }}"
+        state: absent

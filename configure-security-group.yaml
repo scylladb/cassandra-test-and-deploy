@@ -1,0 +1,75 @@
+---
+- name: Provision Cassandra cluster security group
+  hosts: 127.0.0.1
+  connection: local
+  vars:
+    - security_group: cassandra-security-group
+  tasks:
+    - name: Create security group
+      local_action:
+        module: ec2_group
+        name: "{{security_group}}"
+        description: "Cassandra Cluster Security Group"
+        region: "{{region}}"
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 8888
+            to_port: 8888
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 7000
+            to_port: 7000
+            group_id: "{{security_group}}"
+          - proto: tcp
+            from_port: 7001
+            to_port: 7001
+            group_id: "{{security_group}}"
+          - proto: tcp
+            from_port: 7199
+            to_port: 7199
+            group_id: "{{security_group}}"
+          - proto: tcp
+            from_port: 9042
+            to_port: 9042
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 9160
+            to_port: 9160
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 61620
+            to_port: 61620
+            group_id: "{{security_group}}"
+          - proto: tcp
+            from_port: 61621
+            to_port: 61621
+            group_id: "{{security_group}}"
+          - proto: udp
+            from_port: 25826
+            to_port: 25826
+            group_id: "{{security_group}}"
+          - proto: udp
+            from_port: 5555
+            to_port: 5555
+            group_id: "{{security_group}}"
+          - proto: tcp
+            from_port: 5555
+            to_port: 5555
+            group_id: "{{security_group}}"
+          - proto: udp
+            from_port: 5556
+            to_port: 5556
+            group_id: "{{security_group}}"
+          - proto: tcp
+            from_port: 5555
+            to_port: 4567
+            group_id: "{{security_group}}"
+
+        rules_egress:
+          - proto: all
+            type: all
+            cidr_ip: 0.0.0.0/0
