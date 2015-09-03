@@ -1,6 +1,6 @@
 # Ansible Cassandra Cluster Stress 
 
-A framework for running and automating cassandra stress tests on EC2.
+A framework for running and automating Cassandra stress tests on Amazon EC2.
 
 This repository contains Ansible playbooks and scripts for running
 Cassandra performance tests on EC2 with multiple Cassandra servers and
@@ -20,13 +20,13 @@ export AWS_ACCESS_KEY_ID=<...>
 export AWS_SECRET_ACCESS_KEY=<...>
 ```
 
-Make sure your EC2 ssh key is included in the keychain:
+Make sure your EC2 SSH key is included in the keychain:
 
 ```sh
 ssh-add <key-file>
 ```
 
-To avoid prompting for ssh key confirmation
+To avoid prompting for SSH key confirmation
 ```
 export ANSIBLE_HOST_KEY_CHECKING=False
 ```
