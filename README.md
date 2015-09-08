@@ -12,6 +12,13 @@ relevant metrics.
 
 ### Prerequisites
 
+#### install
+Make sure you installed the following:
+* [ansible](http://docs.ansible.com/ansible/intro_installation.html)
+* [python boto](https://github.com/boto/boto#installation)
+
+#### config
+
 Configure EC2 credentials:
 
 ```sh
@@ -47,6 +54,18 @@ export ANSIBLE_EC2_PREFIX=tzach
 ```
 
 ### Setup
+
+#### Create security group
+The following will create a EC2 security group called
+"cassandra-security-group", which is later used for all EC2 servers.
+```
+ansible-playbook -i inventories/ec2/ configure-security-group.yaml
+```
+You only need to run this once.
+Once security group exists, there is no need to repeat this step.
+
+You can use a different security group by adding ```-e
+"security_group=your_group_name"``` option to all ec2-setup-* scripts below.
 
 #### Launch Graphite server
 ```
