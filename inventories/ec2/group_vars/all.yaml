@@ -3,15 +3,13 @@
 setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"
 key_name: "{{ansible_env.EC2_KEY_NAME}}"
 region: us-west-2
+zone: us-west-2b
 
-#cassandra_image: ami-1cff962c # source: http://www.datastax.com/documentation/cassandra/2.0/cassandra/install/installAMILaunch.html
+cassandra_ami: ami-1cff962c # source: http://www.datastax.com/documentation/cassandra/2.0/cassandra/install/installAMILaunch.html
+loadgen_image: ami-3f68640f # ubuntu 14.04
+ubuntu_image: ami-3f68640f # ubuntu 14.04
 
-cassandra_image: ami-3f68640f # cassandra 2.1.8 ubuntu 14.04
-loadgen_image: ami-3f68640f # cassandra 2.1.8  ubuntu 14.04
-# loadgen_image: ami-29ebb519 # ubuntu 14.04
-# cassandra_image: ami-29ebb519  # ubuntu 14.04
-
-# Datastax ami numbers are taken from here: http://www.datastax.com/documentation/cassandra/2.0/cassandra/install/installAMILaunch.html
+cluster_ami: true
 
 instance_type: m3.2xlarge
 #instance_type: m3.large
@@ -20,3 +18,4 @@ security_group: cassandra-security-group
 # graphite Server
 graphite_server_type: m3.large
 graphite_image: ami-29ebb519 # ubuntu
+

@@ -55,6 +55,16 @@ export ANSIBLE_EC2_PREFIX=tzach
 
 ### Setup
 
+The default EC2 region and zone are region: us-west-2 and us-west-2b,
+as define in ```inventories/ec2/group_vars/all.yaml```
+To use a different region, either update the file, or use
+
+```
+-e region=your-region -e zone=your-zone
+```
+for all command below
+
+
 #### Create security group
 The following will create a EC2 security group called
 "cassandra-security-group", which is later used for all EC2 servers.
@@ -84,7 +94,7 @@ port 80.
   * ```-e "cluster_nodes=2"``` - number of cluster nodes (default 2)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "num_tokens=6"``` - set number of vnode per server
-
+  * ```-e "cluster_ami=false"``` - install Cassandra from RPM (default is using DataStax AMI)
 
 #### Launch Loaders
 ```

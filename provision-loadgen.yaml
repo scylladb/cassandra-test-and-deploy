@@ -4,14 +4,16 @@
   connection: local
   vars:
   tasks:
+
     - name: Launch instances
       local_action:
         module: ec2
         region: "{{region}}"
+        zone: "{{zone}}"
         keypair: "{{key_name}}"
         group: "{{security_group}}"
         instance_type: "{{instance_type}}"
-        image: "{{loadgen_image}}"
+        image: "{{ubuntu_image}}"
         count: "{{ load_nodes}}"
         wait: yes
       register: ec2_load
