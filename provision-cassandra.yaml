@@ -6,15 +6,25 @@
     - cluster_name: CassandraCluster
 
   tasks:
+    - set_fact: image={{cassandra_ami}}
+      when: cluster_ami
+
+    - set_fact: image={{ubuntu_image}}
+      when: not (cluster_ami == "true")
+
+    - debug: msg="using ami {{image}}"
+
     - name: Launch instances
       local_action:
         module: ec2
         region: "{{region}}"
+        zone: "{{zone}}"
         keypair: "{{key_name}}"
         group: "{{security_group}}"
         instance_type: "{{instance_type}}"
-        image: "{{cassandra_image}}"
+        image: "{{image}}"
         count: "{{cluster_nodes}}"
+        user_data: "--clustername {{cluster_name}} --totalnodes {{cluster_nodes}} --version community --release {{cassandra_ver}}"
         wait: yes
       register: ec2_cluster
 

@@ -2,8 +2,8 @@
   hosts: NewCassandra
   user: "{{login_user}}"
   roles:
-    - { role: cassandra, sudo: yes, run_server: true}
-    - { role: collectd-client, sudo: yes, tag: "stress" }
+    - { role: cassandra, sudo: yes, run_server: true, when: cluster_ami== 'false'}
+    - { role: collectd-client, sudo: yes, tag: "stress", when: cluster_ami== 'false' }
 
 - name: Run Cassandra nodes
   hosts: NewCassandra
@@ -12,4 +12,3 @@
   tasks:
     - include: roles/cassandra/tasks/start.yaml
       when: not stopped
-
