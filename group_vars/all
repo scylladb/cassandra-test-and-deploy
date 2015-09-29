@@ -3,7 +3,7 @@ cluster_nodes: 2
 load_nodes: 2
 login_user: ubuntu
 add_node: false
-stopped: false
+stopped: "false"
 cluster_name: CassandraCluster
 
 cassandra_ver: 2.1.8

@@ -10,7 +10,7 @@
       when: cluster_ami
 
     - set_fact: image={{ubuntu_image}}
-      when: not (cluster_ami == "true")
+      when: cluster_ami == "false"
 
     - debug: msg="using ami {{image}}"
 
