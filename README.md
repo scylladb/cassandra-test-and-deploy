@@ -1,14 +1,11 @@
-# Ansible Cassandra Cluster Stress 
+# Ansible Scylla and Cassandra Cluster Stress 
 
-A framework for running and automating Cassandra stress tests on Amazon EC2.
+A framework for running and automating Scylla/Cassandra stress tests on Amazon EC2.
 
 This repository contains Ansible playbooks and scripts for running
-Cassandra performance tests on EC2 with multiple Cassandra servers and
+Scylla/Cassandra performance tests on EC2 with multiple DB servers and
 multiple cassandra-stress loaders, as well as adding, stopping and
 starting nodes.
-
-Optional Graphite server, with [Tessera](http://urbanairship.com/blog/2014/06/30/introducing-tessera-a-graphite-frontend) front-end, collect and present
-relevant metrics.
 
 ### Prerequisites
 
@@ -77,15 +74,23 @@ Once security group exists, there is no need to repeat this step.
 You can use a different security group by adding ```-e
 "security_group=your_group_name"``` option to all ec2-setup-* scripts below.
 
-#### Launch Graphite server
-```
-./ec2-setup-graphite.sh
-```
-You can access the Graphite UI at port 8080, or the Tessera UI at
-port 80.
+#### Launch Scylla cluster
+Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
 
+```
+./ec2-setup-scylla.sh <options>
+```
+
+  **options**
+  * ```-e "cluster_nodes=2"``` - number of cluster nodes (default 2)
+  * ```-e "instance_type=c3.8xlarge"``` - type of EC2 instance
+
+Server are created with EC2 name *DB*, and tag "server=scylla"
 
 #### Launch Cassandra cluster
+Cassandra servers launch from AMI, , base on Ubuntu 14 (login ubuntu), or using package installation.
+See **cluster_ami** option below.
+
 ```
 ./ec2-setup-cassandra.sh <options>
 ```
@@ -96,7 +101,11 @@ port 80.
   * ```-e "num_tokens=6"``` - set number of vnode per server
   * ```-e "cluster_ami=false"``` - install Cassandra from RPM (default is using DataStax AMI)
 
+Server are created with EC2 name *DB*, and tag "server=cassandra"
+
 #### Launch Loaders
+Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including a version of cassandra-stress which only use CQL, not thrift.
+
 ```
 ./ec2-setup-loadgen.sh <options>
 ```
@@ -123,7 +132,7 @@ port 80.
 ### Run Load
 
 ```
-./ec2-stress.sh <iterations> -e "load_name=late_night" <more options>
+./ec2-stress.sh <iterations> -e "load_name=late_night" -e "server=scylla" <more options>
 ```
 
 **Options**
@@ -133,6 +142,7 @@ All parameters are available at
 To override each of the parameter, use the ``-e "param=value"
 notation. Examples below:
 
+* ```-e "server=cassandra"``` - test cassandra servers (default is scylla)
 * ```-e "populate=2500000"``` - key population per loader (default is 1000000)
 * ```-e "command=write"``` [read, write,mixed,..] setting stress command
 * ```-e "stress_options='-schema \"replication(factor=2)\"'"```
@@ -171,11 +181,16 @@ update the **stopped** tag back to false.
 The next stress test will restart the Cassandra service.
 
 ### Terminate Servers
-(except the Graphite server)
 ```
 ./ec2-terminate.sh
 ```
 
+## Todo
+Scylla cluster does not yet support:
+* clean_data option, to clean data files before each stress
+* ec2-add-node-to-cluster, ec2-start-server.sh and ec2-stop-server.sh
+
+
 ## License
-The Cassandra Cluster Stress is distributed under the Apache License.
+The Scylla/Cassandra Cluster Stress is distributed under the Apache License.
 See LICENSE.TXT for more.

@@ -1,6 +1,6 @@
 ---
 - name: Find Cassandra instance(s)
-  hosts: Cassandra
+  hosts: DB
   gather_facts: false
   tasks:
     - name: Create group

@@ -29,11 +29,11 @@
       register: ec2_cluster
 
     - name: Add instances to host group
-      local_action: add_host name={{item.public_ip}} groupname=NewCassandra
+      local_action: add_host name={{item.public_ip}} groupname=NewDB
       with_items: ec2_cluster.instances
 
     - name: Add instances to private ip group
-      local_action: add_host name={{item.private_ip}} groupname=CassandraPrivate
+      local_action: add_host name={{item.private_ip}} groupname=DBPrivate
       with_items: ec2_cluster.instances
 
     - name: Add instance 0 to seeds group
@@ -41,7 +41,7 @@
       when: not add_node
 
     - name: Add instance 0 to seedsip group
-      local_action: add_host name={{groups.CassandraPrivate[0]}} groupname=SeedsIp
+      local_action: add_host name={{groups.DBPrivate[0]}} groupname=SeedsIp
       when: not add_node
 
     - name: Add instance 1 to seeds group
@@ -49,7 +49,7 @@
       when: not add_node and ec2_cluster.instances | length > 1
 
     - name: Add instance 1 to seedsip group
-      local_action: add_host name={{groups.CassandraPrivate[1]}} groupname=SeedsIp
+      local_action: add_host name={{groups.DBPrivate[1]}} groupname=SeedsIp
       when: not add_node and ec2_cluster.instances | length > 1
 
 
@@ -64,8 +64,8 @@
       with_items: ec2_cluster.instances
       args:
         tags:
-          Name: "Cassandra"
-          server: "origin"
+          Name: "DB"
+          server: "cassandra"
           stopped: "{{stopped}}"
           user: "{{setup_name}}"
 

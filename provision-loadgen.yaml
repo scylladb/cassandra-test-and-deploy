@@ -13,7 +13,7 @@
         keypair: "{{key_name}}"
         group: "{{security_group}}"
         instance_type: "{{instance_type}}"
-        image: "{{ubuntu_image}}"
+        image: "{{scylla_ami}}"
         count: "{{ load_nodes}}"
         wait: yes
       register: ec2_load
@@ -31,4 +31,4 @@
           user: "{{setup_name}}"
 
     - name: Give everyone a minute or two
-      pause: seconds=60
+      pause: seconds=120

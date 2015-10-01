@@ -6,13 +6,18 @@ region: us-west-2
 zone: us-west-2b
 
 cassandra_ami: ami-1cff962c # source: http://www.datastax.com/documentation/cassandra/2.0/cassandra/install/installAMILaunch.html
+scylla_ami: ami-79100849 # scylla 0.9.0
 loadgen_image: ami-3f68640f # ubuntu 14.04
 ubuntu_image: ami-3f68640f # ubuntu 14.04
 
+graphite_login: ubuntu
+cassandra_login: ubuntu
+scylla_login: fedora
+loader_login: fedora
+
 cluster_ami: true
 
-instance_type: m3.2xlarge
-#instance_type: m3.large
+instance_type: c3.8xlarge
 security_group: cassandra-security-group
 
 # graphite Server

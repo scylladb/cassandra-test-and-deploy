@@ -10,7 +10,7 @@
 
 - name: upload stress file to loaders
   hosts: "CassandraLoadgen"
-  user: "{{login_user}}"
+  user: "{{loader_login}}"
   tasks:
     - name: Creates directory
       file: path="~/{{profile_file | dirname }}" state=directory
