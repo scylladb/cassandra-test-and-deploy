@@ -1,12 +1,12 @@
 ---
-- name: Provision Cassandra cluster nodes on EC2
+- name: Provision Scylla cluster nodes on EC2
   hosts: localhost
   connection: local
   vars:
-    - cluster_name: CassandraCluster
+    - cluster_name: ScyllaCluster
 
   tasks:
-    - set_fact: image={{cassandra_ami}}
+    - set_fact: image={{scylla_ami}}
       when: cluster_ami
 
     - set_fact: image={{ubuntu_image}}
@@ -24,7 +24,7 @@
         instance_type: "{{instance_type}}"
         image: "{{image}}"
         count: "{{cluster_nodes}}"
-        user_data: "--clustername {{cluster_name}} --totalnodes {{cluster_nodes}} --version community --release {{cassandra_ver}}"
+        user_data: "--clustername {{cluster_name}} --totalnodes {{cluster_nodes}}"
         wait: yes
       register: ec2_cluster
 
@@ -65,7 +65,7 @@
       args:
         tags:
           Name: "DB"
-          server: "cassandra"
+          server: "scylla"
           stopped: "{{stopped}}"
           user: "{{setup_name}}"
 
@@ -78,4 +78,4 @@
       when: not add_node
 
     - name: Give everyone a minute or two
-      pause: seconds=60
+      pause: seconds=120

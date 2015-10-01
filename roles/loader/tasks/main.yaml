@@ -1,4 +1,7 @@
 ---
+- service: name=scylla-server enabled=yes state=stopped
+  sudo: yes
+
 - name: Gather facts
   action: ec2_facts
 
@@ -8,7 +11,7 @@
 - set_fact: index="{{ansible_ec2_ami_launch_index}}"
   when: ansible_ec2_ami_launch_index is defined
 
-- name: Tag instance as Stopped
+- name: Tag instance index
   local_action: ec2_tag resource={{id}} state=present region={{region}}
   when: ansible_ec2_ami_launch_index is defined
   args:

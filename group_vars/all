@@ -14,13 +14,13 @@ command: write
 command_options:
 output_format: cassandra-stress.{{command}}.{{load_name}}.{{ansible_date_time.date}}
 output_file: "{{output_format}}"
-remote_path: /home/{{login_user}}/
+remote_path: /home/{{loader_login}}/
 home_path: /tmp/cassandra-results/
 stress_options:
 populate: 1000000
 sleep_between_runs: 60
 threads: 250
-clean_data: true
+clean_data: false
 profile_git: false
 profile_dir: /tmp/cassandra-stress-profiles/
 profile_file: false

@@ -1,8 +1,9 @@
-[tag_Name_Cassandra]
+[tag_Name_DB]
 
 [tag_Name_CassandraLoadgen]
 
-[tag_server_origin]
+[tag_server_cassandra]
+[tag_server_scylla]
 
 [tag_stopped_true]
 
@@ -10,14 +11,18 @@
 
 [tag_Name_GraphiteServer]
 
-[Cassandra:children]
-tag_Name_Cassandra
+[DB:children]
+tag_Name_DB
 
 [CassandraLoadgen:children]
 tag_Name_CassandraLoadgen
 
-[Origin:children]
-tag_server_origin
+[Cassandra:children]
+tag_server_cassandra
+
+[Scylla:children]
+tag_server_scylla
+
 
 [Stopped:children]
 tag_stopped_true

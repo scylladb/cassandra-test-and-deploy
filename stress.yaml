@@ -4,12 +4,13 @@
 
 - name: Run stress
   hosts: "CassandraLoadgen"
-  user: "{{login_user}}"
+  user: "{{loader_login}}"
   vars:
     iteration: 0 # overload me
+    server: "scylla"
   tasks:
 
-    - local_action: shell ./ec2-get-private-ips.py {{region}} {{setup_name}} "Cassandra" | cut -f2 -d' ' | sed s/^/\'/ | sed s/$/\'/ | sed ':a;N;$!ba;s/\n/,/g'
+    - local_action: shell ./ec2-get-private-ips.py {{region}} {{setup_name}} "DB" {{server}} | cut -f2 -d' ' | sed s/^/\'/ | sed s/$/\'/ | sed ':a;N;$!ba;s/\n/,/g'
       register: private_ips
       when: ip_list is not defined
 

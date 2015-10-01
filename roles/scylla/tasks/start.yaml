@@ -1,0 +1,18 @@
+---
+- name: start scylla service
+  action: service name=scylla enabled=yes pattern=scylla state=restarted
+  sudo: yes
+- name: Gather facts
+  action: ec2_facts
+- set_fact:
+    id: "{{ansible_ec2_instance_id}}"
+  when: ansible_ec2_instance_id is defined
+- name: Tag instance as none stopped
+  local_action: ec2_tag resource={{id}} state=present region={{region}}
+  when: ansible_ec2_instance_id is defined
+  args:
+    tags:
+      stopped: "false"
+
+- name: Give everyone a minute or two
+  pause: seconds={{wait_after_adding_server}}
