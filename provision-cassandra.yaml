@@ -25,6 +25,11 @@
         image: "{{image}}"
         count: "{{cluster_nodes}}"
         user_data: "--clustername {{cluster_name}} --totalnodes {{cluster_nodes}} --version community --release {{cassandra_ver}}"
+        volumes:
+        - device_name: /dev/sdb
+          ephemeral: ephemeral0
+        - device_name: /dev/sdc
+          ephemeral: ephemeral1
         wait: yes
       register: ec2_cluster
 
