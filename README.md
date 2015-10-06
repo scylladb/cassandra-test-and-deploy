@@ -7,6 +7,17 @@ Scylla/Cassandra performance tests on EC2 with multiple DB servers and
 multiple cassandra-stress loaders, as well as adding, stopping and
 starting nodes.
 
+### Introduction
+The following will compare Scylla cluster to Cassandra cluster performance on EC2, using 6 loader servers
+```
+./ec2-setup-scylla.sh -e "cluster_nodes=2"
+./ec2-setup-cassandra.sh -e "cluster_nodes=2"
+./ec2-setup-loadgen.sh -e "load_nodes=6"
+./ec2-stress.sh 1 -e "load_name=cassandra.v1" -e "server=cassandra" -e "stress_options='-errors ignore'"
+./ec2-stress.sh 1 -e "load_name=scylla.v1" -e "server=scylla" -e "stress_options='-errors ignore'"
+```
+Note you will need more load nodes to stress Scylla.
+
 ### Prerequisites
 
 #### install
@@ -149,6 +160,7 @@ notation. Examples below:
 * ```-e "stress_options='-errors ignore'"```
 * ```-e "command_options='cl=LOCAL_ONE -mode native cql3'"```
 * ```-e "command_options=duration=60m"```
+* ```-e "threads=200"```
 * ```-e "profile_dir=/tmp/cassandra-stress-profiles/" -e "profile_file=cust_a/users/users1.yaml" -e "command_options=ops\\(insert=1\\)"```
 
 Make sure **load name is unique**  so the new results will not
