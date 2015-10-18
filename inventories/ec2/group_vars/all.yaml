@@ -6,7 +6,7 @@ region: us-west-2
 zone: us-west-2b
 
 cassandra_ami: ami-1cff962c # source: http://www.datastax.com/documentation/cassandra/2.0/cassandra/install/installAMILaunch.html
-scylla_ami: ami-79100849 # scylla 0.9.0
+scylla_ami: ami-70bd5c43 # scylla 0.10
 loadgen_image: ami-3f68640f # ubuntu 14.04
 ubuntu_image: ami-3f68640f # ubuntu 14.04
 
