@@ -4,9 +4,9 @@
   gather_facts: false
   tasks:
     - name: Create group
-      group_by: key=cassandra_nodes
+      group_by: key=db_nodes
 
-- hosts: cassandra_nodes
+- hosts: db_nodes
   connection: local
   gather_facts: false
   tasks:
