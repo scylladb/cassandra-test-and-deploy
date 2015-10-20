@@ -3,5 +3,5 @@
   hosts: "DB:&Cassandra"
   user: "{{cassandra_login}}"
   tasks:
-    - { include: roles/cassandra/tasks/stop.yaml }
+    - { include: roles/cassandra-config/tasks/stop.yaml }
 

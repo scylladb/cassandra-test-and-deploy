@@ -2,10 +2,10 @@
 #TODO: dump only relevant parameters
 
 - set_fact: image={{cassandra_ami}}
-  when: cluster_ami
+  when: use_db_ami
 
 - set_fact: image={{ubuntu_image}}
-  when: not cluster_ami
+  when: not use_db_ami
 
 - set_fact: dest_name="{{home_path}}{{output_file}}.params"
 - name: write parameters to file

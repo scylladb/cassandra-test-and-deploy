@@ -1,0 +1,28 @@
+---
+# stop the service and clean data with wrong config file
+- service: name=cassandra enabled=yes pattern=cassandra state=stopped
+- shell: rm -rf {{data_dir}}/data
+
+# use exisiting nodes as seed, even if they are not
+- command: echo "{{ hostvars[item].ec2_private_ip_address }}"
+  with_items: groups.Cassandra
+  register: output
+  changed_when: no
+  when: add_node
+
+- set_fact: seeds="{{ output.results|map(attribute='stdout')| first }}"
+  when: add_node
+
+- debug: msg="seeds {{seeds}}"
+  when: add_node
+
+- set_fact: seeds="{{ groups.SeedsIp | join(',') }}"
+  when: not add_node and seeds is not defined
+
+- set_fact: auto_bootstrap="true"
+  when: add_node
+
+- debug: msg="{{internal_ip}}"
+
+- action: template src=cassandra.yaml dest=/etc/cassandra/cassandra.yaml mode="u=rw,g=r,o=r"
+- action: template src=cassandra-rackdc.properties dest=/etc/cassandra/cassandra-rackdc.properties mode="u=rw,g=r,o=r"

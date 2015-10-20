@@ -5,7 +5,6 @@
 - apt: name={{ item }} state=present update_cache=yes cache_valid_time=600
   with_items:
     - collectd
-  when: install
 
 - name: add libjvm.so to lib path
   lineinfile: dest=/etc/default/collectd line="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:{{java_lib_path}}"

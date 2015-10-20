@@ -1,4 +1,4 @@
----
 internal_ip: "{{ansible_all_ipv4_addresses[0]}}"
 auto_bootstrap: "false"
 num_tokens: 256
+data_dir: /mnt/cassandra

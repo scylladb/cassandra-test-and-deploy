@@ -99,8 +99,7 @@ Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
 Server are created with EC2 name *DB*, and tag "server=scylla"
 
 #### Launch Cassandra cluster
-Cassandra servers launch from AMI, , base on Ubuntu 14 (login ubuntu), or using package installation.
-See **cluster_ami** option below.
+Cassandra servers launch from AMI, base on Ubuntu 14 (login ubuntu)
 
 ```
 ./ec2-setup-cassandra.sh <options>
@@ -110,7 +109,6 @@ See **cluster_ami** option below.
   * ```-e "cluster_nodes=2"``` - number of cluster nodes (default 2)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "num_tokens=6"``` - set number of vnode per server
-  * ```-e "cluster_ami=false"``` - install Cassandra from RPM (default is using DataStax AMI)
 
 Server are created with EC2 name *DB*, and tag "server=cassandra"
 
@@ -137,7 +135,7 @@ Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including 
 
 #### Start stopped nodes (one by one)
 ```
-./ec2-start-server.sh <number of servers>
+./ec2-start-server.sh
 ```
 
 ### Run Load
@@ -201,6 +199,7 @@ The next stress test will restart the Cassandra service.
 Scylla cluster does not yet support:
 * clean_data option, to clean data files before each stress
 * ec2-add-node-to-cluster, ec2-start-server.sh and ec2-stop-server.sh
+* add multi DC support
 
 
 ## License

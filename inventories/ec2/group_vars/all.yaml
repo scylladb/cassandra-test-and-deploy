@@ -15,8 +15,6 @@ cassandra_login: ubuntu
 scylla_login: fedora
 loader_login: fedora
 
-cluster_ami: true
-
 instance_type: c3.8xlarge
 security_group: cassandra-security-group
 

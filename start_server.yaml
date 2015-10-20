@@ -4,4 +4,4 @@
   user: "{{cassandra_login}}"
   serial: 1
   tasks:
-    - { include: roles/cassandra/tasks/start.yaml }
+    - { include: roles/cassandra-config/tasks/start.yaml }
