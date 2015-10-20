@@ -1,0 +1,27 @@
+---
+- apt_repository: repo='deb http://debian.datastax.com/community stable main' state=present
+- apt_key: url=http://debian.datastax.com/debian/repo_key state=present
+- apt: name=cassandra={{cassandra_ver}} state=installed update-cache=yes
+
+- name: Check to see if /mnt exists
+  stat: path=/mnt
+  register: mnt
+
+- name: soft link from /var/lib/cassansdra to /mnt/cassandra
+  file:
+    dest=/var/lib/cassandra
+    src=/mnt/cassandra
+    state=link
+    force=yes
+  when: mnt.stat.exists == true
+
+- name: create /mnt/cassandra
+  file:
+    path: /mnt/cassandra
+    state: directory
+    owner: "cassandra"
+    group: "cassandra"
+    mode: "u+rwx,g=r,o=r"
+  when: mnt.stat.exists == true
+
+
