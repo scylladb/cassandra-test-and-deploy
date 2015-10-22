@@ -4,9 +4,12 @@
   sudo: yes
 - name: Gather facts
   action: ec2_facts
+
 - set_fact:
     id: "{{ansible_ec2_instance_id}}"
+    region: "{{ ansible_ec2_placement_availability_zone | regex_replace('(.*[1-9])(.)', '\\\\1' ) }}"
   when: ansible_ec2_instance_id is defined
+
 - name: Tag instance as none stopped
   local_action: ec2_tag resource={{id}} state=present region={{region}}
   when: ansible_ec2_instance_id is defined
