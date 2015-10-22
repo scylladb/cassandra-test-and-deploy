@@ -1,14 +1,26 @@
 ---
 # EC2 specific vars
 setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"
-key_name: "{{ansible_env.EC2_KEY_NAME}}"
-region: us-west-2
-zone: us-west-2b
 
-cassandra_ami: ami-1cff962c # source: http://www.datastax.com/documentation/cassandra/2.0/cassandra/install/installAMILaunch.html
-scylla_ami: ami-70bd5c43 # scylla 0.10
-loadgen_image: ami-3f68640f # ubuntu 14.04
-ubuntu_image: ami-3f68640f # ubuntu 14.04
+#key_name: "{{ansible_env.EC2_KEY_NAME}}"
+#region: us-west-2
+#zone: us-west-2b
+
+regions:
+  us-west-2:
+    cassandra_ami: ami-1cff962c
+    scylla_ami: ami-70bd5c43 # scylla 0.10
+    loadgen_image: ami-3f68640f # ubuntu 14.04
+    ubuntu_image: ami-3f68640f # ubuntu 14.04
+    key_name: tzach-oregon
+    security_group: cassandra-security-group
+  us-east-1:
+    cassandra_ami: ami-ada2b6c4
+    scylla_ami: ami-69a1ea0c # scylla 0.10
+    loadgen_image: ami-d05e75b8 # ubuntu 14.04
+    ubuntu_image: ami-d05e75b8 # ubuntu 14.04
+    key_name: tzach-2
+    security_group: cassandra-security-group
 
 graphite_login: ubuntu
 cassandra_login: ubuntu
@@ -16,7 +28,8 @@ scylla_login: fedora
 loader_login: fedora
 
 instance_type: c3.8xlarge
-security_group: cassandra-security-group
+
+ec2_multiregion: false
 
 # graphite Server
 graphite_server_type: m3.large

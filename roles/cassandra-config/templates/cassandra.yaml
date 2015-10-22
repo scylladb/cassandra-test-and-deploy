@@ -369,7 +369,8 @@ listen_address: {{internal_ip}}
 
 # Address to broadcast to other Cassandra nodes
 # Leaving this blank will set it to the same value as listen_address
-# broadcast_address: 1.2.3.4
+broadcast_address: {{broadcast_address}}
+
 
 # Internode authentication backend, implementing IInternodeAuthenticator;
 # used to allow/disallow connections from peer nodes.
@@ -651,7 +652,7 @@ cross_node_timeout: false
 #
 # You can use a custom Snitch by setting this to the full class name
 # of the snitch, which will be assumed to be on your classpath.
-endpoint_snitch: Ec2Snitch
+endpoint_snitch: {{snitch}}
 
 # controls how often to perform the more expensive part of host score
 # calculation

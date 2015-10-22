@@ -4,26 +4,32 @@
   connection: local
   vars:
     user_data: "--clustername {{cluster_name}} --totalnodes {{cluster_nodes}} --version={{db_version}} --release={{cassandra_ver}}"
-
+    results:
+      - instances:
+          public_ip: 17
+      - instances:
+          public_ip: 18
   tasks:
-    - set_fact: image={{db_ami}}
-      when: use_db_ami
 
-    - set_fact: image={{ubuntu_image}}
-      when: use_db_ami == "false"
+    # - set_fact: image={{db_ami}}
+    #   when: use_db_ami
 
-    - debug: msg="using ami {{image}}"
-    - debug: msg="user_data {{user_data}}"
+    # - set_fact: image={{ubuntu_image}}
+    #   when: use_db_ami == "false"
 
-    - name: Launch {{db}} instances
+    # - debug: msg="using ami {{image}}"
+    # - debug: msg="user_data {{user_data}}"
+
+
+    - name: Launch DB server instances
       local_action:
         module: ec2
-        region: "{{region}}"
-        zone: "{{zone}}"
-        keypair: "{{key_name}}"
-        group: "{{security_group}}"
+        region: "{{item.key}}"
+        keypair: "{{item.value.key_name}}"
+        group: "{{item.value.security_group}}"
         instance_type: "{{instance_type}}"
-        image: "{{image}}"
+        # TBD add Scylla
+        image: "{{item.value.cassandra_ami}}"
         count: "{{cluster_nodes}}"
         user_data: "{{user_data}}"
         volumes:
@@ -33,35 +39,40 @@
           ephemeral: ephemeral1
         wait: yes
       register: ec2_cluster
+      with_dict: regions
 
     - name: Add instances to host group
-      local_action: add_host name={{item.public_ip}} groupname=NewDB
-      with_items: ec2_cluster.instances
+      local_action: add_host name={{item.1.public_ip}} groupname=NewDB
+      with_subelements:
+        - ec2_cluster.results
+        - instances
 
     - name: Add instances to private ip group
-      local_action: add_host name={{item.private_ip}} groupname=DBPrivate
-      with_items: ec2_cluster.instances
-      when: not use_reflector
+      local_action: add_host name={{item.1.private_ip}} groupname=DBPrivate
+      when: not use_reflector|bool
+      with_subelements:
+        - ec2_cluster.results
+        - instances
 
     - name: Add instance 0 to seeds group
-      local_action: add_host name={{ec2_cluster.instances[0].id}} groupname=Seeds
-      when: not use_reflector
+      local_action: add_host name={{ec2_cluster.results[0].instances[0].id}} groupname=Seeds
+      when: not use_reflector|bool
 
-    - name: Add instance 0 to seedsip group
+      # use prive ip as seed in one region
+    - name: Add instance 0 private ip as seed
       local_action: add_host name={{groups.DBPrivate[0]}} groupname=SeedsIp
-      when: not use_reflector
+      when: not (use_reflector|bool or ec2_multiregion|bool)
 
-    - name: Add instance 1 to seeds group
-      local_action: add_host name={{ec2_cluster.instances[1].id}} groupname=Seeds
-      when: not use_reflector and ec2_cluster.instances | length > 1
-
-    - name: Add instance 1 to seedsip group
-      local_action: add_host name={{groups.DBPrivate[1]}} groupname=SeedsIp
-      when: not use_reflector and ec2_cluster.instances | length > 1
+      # use public ip as seed in multi region
+    - name: Add instance 0 public ip as seed
+      local_action: add_host name={{groups.NewDB[0]}} groupname=SeedsIp
+      when: ec2_multiregion|bool and not use_reflector|bool
 
     - name: Tag instances
-      local_action: ec2_tag resource={{item.id}} region={{region}} state=present
-      with_items: ec2_cluster.instances
+      local_action: ec2_tag resource={{item.1.id}} region={{item.1.region}} state=present
+      with_subelements:
+        - ec2_cluster.results
+        - instances
       args:
         tags:
           Name: "DB"
@@ -70,13 +81,12 @@
           user: "{{setup_name}}"
 
     - name: Tag Seed instances
-      local_action: ec2_tag resource={{item}} region={{region}} state=present
+      local_action: ec2_tag resource={{item}} region={{ec2_cluster.results[0].instances[0].region}} state=present
       with_items: groups.Seeds
       args:
         tags:
           seed: "true"
-      when: not use_reflector
-
+      when: not use_reflector|bool
 
     - name: Give everyone a minute or two
       pause: seconds=120

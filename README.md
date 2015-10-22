@@ -30,7 +30,6 @@ Make sure you installed the following:
 Configure EC2 credentials:
 
 ```sh
-export EC2_KEY_NAME=<...>
 export AWS_ACCESS_KEY_ID=<...>
 export AWS_SECRET_ACCESS_KEY=<...>
 ```
@@ -40,6 +39,7 @@ Make sure your EC2 SSH key is included in the keychain:
 ```sh
 ssh-add <key-file>
 ```
+**You should do it for each of EC2 zones!**
 
 To avoid prompting for SSH key confirmation
 ```
@@ -77,13 +77,12 @@ for all command below
 The following will create a EC2 security group called
 "cassandra-security-group", which is later used for all EC2 servers.
 ```
-ansible-playbook -i inventories/ec2/ configure-security-group.yaml
+ansible-playbook -i inventories/ec2/ configure-security-group.yaml ```-e "security_group=cassandra-security-group" -e "region=your-ec2-region" -e "-e "vpc_id=your-vpc"
 ```
 You only need to run this once.
 Once security group exists, there is no need to repeat this step.
 
-You can use a different security group by adding ```-e
-"security_group=your_group_name"``` option to all ec2-setup-* scripts below.
+You can use a different security group by adding ```-e "security_group=your_group_name"``` option to all ec2-setup-* scripts below.
 
 #### Launch Scylla cluster
 Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)

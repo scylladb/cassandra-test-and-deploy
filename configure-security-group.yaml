@@ -8,6 +8,7 @@
         module: ec2_group
         name: "{{security_group}}"
         region: "{{region}}"
+        vpc_id: "{{vpc_id}}"
         description: "Cassandra Cluster Security Group"
         rules:
           - proto: tcp
@@ -25,11 +26,12 @@
           - proto: tcp
             from_port: 7000
             to_port: 7000
-            group_name: "{{security_group}}"
+            cidr_ip: 0.0.0.0/0
           - proto: tcp
             from_port: 7001
             to_port: 7001
             group_name: "{{security_group}}"
+            cidr_ip: 0.0.0.0/0
           - proto: tcp
             from_port: 7199
             to_port: 7199
@@ -86,8 +88,6 @@
             from_port: -1
             to_port: -1
             cidr_ip: 0.0.0.0/0
-
-
 
         rules_egress:
           - proto: all
