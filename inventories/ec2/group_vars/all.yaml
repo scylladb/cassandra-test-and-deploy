@@ -2,10 +2,6 @@
 # EC2 specific vars
 setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"
 
-#key_name: "{{ansible_env.EC2_KEY_NAME}}"
-#region: us-west-2
-#zone: us-west-2b
-
 regions:
   us-west-2:
     cassandra_ami: ami-1cff962c
@@ -19,7 +15,7 @@ regions:
     scylla_ami: ami-69a1ea0c # scylla 0.10
     loadgen_image: ami-d05e75b8 # ubuntu 14.04
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
-    key_name: tzach-2
+    key_name: tzach-virginia
     security_group: cassandra-security-group
 
 graphite_login: ubuntu
@@ -34,4 +30,3 @@ ec2_multiregion: false
 # graphite Server
 graphite_server_type: m3.large
 graphite_image: ami-29ebb519 # ubuntu
-

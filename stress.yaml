@@ -9,13 +9,18 @@
     iteration: 0 # overload me
     server: "scylla"
   tasks:
+    - name: Gather facts
+      action: ec2_facts
 
-    - local_action: shell ./ec2-get-private-ips.py {{region}} {{setup_name}} "DB" {{server}} | cut -f2 -d' ' | sed s/^/\'/ | sed s/$/\'/ | sed ':a;N;$!ba;s/\n/,/g'
-      register: private_ips
-      when: ip_list is not defined
+    - set_fact:
+        region_group: "{{ ec2_region | regex_replace('-','_') }}"
+        user_group: "tag_user_{{setup_name}}"
 
-    - set_fact: ip_list="{{ private_ips.stdout }}"
-      when: ip_list is not defined
+    - debug: msg="{{ hostvars[item].ec2_private_ip_address }}"
+      with_items: groups.DB | intersect (groups.{{region_group}}) | intersect (groups.{{user_group}})
+      register: output
+
+    - set_fact: ip_list={{ output.results|map(attribute='msg') | join(',') }}
 
     - debug: msg="ip_list is {{ip_list}}"
 
