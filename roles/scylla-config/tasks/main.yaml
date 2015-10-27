@@ -1,0 +1,36 @@
+---
+- name: Gather facts
+  action: ec2_facts
+
+# stop the service and clean data with wrong config file
+- include: clean.yaml
+
+# use exisiting nodes as seed, even if they are not
+# TBD find public IP in case of multi region
+- command: echo "{{ hostvars[item].ec2_private_ip_address }}"
+  with_items: groups.Scylla
+  register: output
+  changed_when: no
+  when: add_node
+
+- set_fact: seeds="{{ output.results|map(attribute='stdout')| first }}"
+  when: add_node
+
+- debug: msg="seeds {{seeds}}"
+  when: add_node
+
+- set_fact: seeds="{{ groups.SeedsIp | join(',') }}"
+  when: not add_node and seeds is not defined
+
+- set_fact: auto_bootstrap="true"
+  when: add_node
+
+- set_fact: snitch="Ec2MultiRegionSnitch"
+  when: ec2_multiregion|bool
+
+- set_fact: broadcast_address="{{ansible_ec2_public_ipv4}}"
+  when: ec2_multiregion|bool
+
+
+- action: template src=scylla.yaml dest=/var/lib/scylla/conf/scylla.yaml mode="u=rw,g=r,o=r"
+- action: template src=cassandra-rackdc.properties dest=/var/lib/scylla/conf/cassandra-rackdc.properties mode="u=rw,g=r,o=r"

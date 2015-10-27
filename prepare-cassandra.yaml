@@ -12,4 +12,4 @@
   user: "{{cassandra_login}}"
   tasks:
     - include: roles/cassandra-config/tasks/start.yaml
-      when: not stopped|bool
+      when: ec2_multiregion|bool or not stopped|bool

@@ -1,5 +1,5 @@
 ---
-- include: clean_data.yaml
+- include: clean_data.yaml # TBD clean only Cassandra, not Scylla
 - include: stress_profile.yaml
 
 - name: Run stress
@@ -7,7 +7,7 @@
   user: "{{loader_login}}"
   vars:
     iteration: 0 # overload me
-    server: "scylla"
+    server: "Scylla"
   tasks:
     - name: Gather facts
       action: ec2_facts
@@ -17,7 +17,7 @@
         user_group: "tag_user_{{setup_name}}"
 
     - debug: msg="{{ hostvars[item].ec2_private_ip_address }}"
-      with_items: groups.DB | intersect (groups.{{region_group}}) | intersect (groups.{{user_group}})
+      with_items: groups.DB | intersect (groups.{{region_group}}) | intersect (groups.{{user_group}}) | intersect (groups.{{server}})
       register: output
 
     - set_fact: ip_list={{ output.results|map(attribute='msg') | join(',') }}
@@ -34,7 +34,7 @@
     - debug: msg="client key range {{range}}"
 
     - debug: msg="cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}"
-      
+
     - shell: sleep {{sleep_between_runs}}; cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}
       when: not profile_file | bool
       ignore_errors: True

@@ -6,29 +6,26 @@
     user_data: "--clustername {{cluster_name}} --totalnodes {{cluster_nodes}} --version={{db_version}} --release={{cassandra_ver}}"
 
   tasks:
+    - set_fact: db_ami_name="cassandra_ami"
+      when: db == 'cassandra'
 
-    # - set_fact: image={{db_ami}}
-    #   when: use_db_ami
+    - set_fact: db_ami_name="scylla_ami"
+      when: db == 'scylla'
 
-    # - set_fact: image={{ubuntu_image}}
-    #   when: use_db_ami == "false"
+    - set_fact: ami_name="{{db_ami_name}}"
+      when: use_db_ami | bool
 
-    # - debug: msg="using ami {{image}}"
-    # - debug: msg="user_data {{user_data}}"
+    - set_fact: ami_name="ubuntu_image"
+      when: not use_db_ami | bool
 
-    # - debug: msg="{{regions}}"
-    # - debug: msg="{{first_regions}}"
-    # - debug: msg="{{use_regions}}"
+    - set_fact: image={{db_ami_name}}
+      when: use_db_ami
 
-    # - debug: msg="{{item.key}}"
-    #   with_dict: regions
+    - set_fact: image={{ubuntu_image}}
+      when: use_db_ami == "false"
 
-    # - debug: msg="{{item.key}}"
-    #   with_dict: first_regions
-  
-    # - debug: msg="{{item.key}}"
-    #   with_dict: use_regions
-
+    - debug: msg="using {{image}}"
+    - debug: msg="user_data {{user_data}}"
 
     - name: Launch DB server instances
       local_action:
@@ -37,8 +34,7 @@
         keypair: "{{item.value.key_name}}"
         group: "{{item.value.security_group}}"
         instance_type: "{{instance_type}}"
-        # TBD add Scylla
-        image: "{{item.value.cassandra_ami}}"
+        image: "{{item.value[image]}}"
         count: "{{cluster_nodes}}"
         user_data: "{{user_data}}"
         volumes:
