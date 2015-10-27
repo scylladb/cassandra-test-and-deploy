@@ -4,11 +4,7 @@
   connection: local
   vars:
     user_data: "--clustername {{cluster_name}} --totalnodes {{cluster_nodes}} --version={{db_version}} --release={{cassandra_ver}}"
-    results:
-      - instances:
-          public_ip: 17
-      - instances:
-          public_ip: 18
+
   tasks:
 
     # - set_fact: image={{db_ami}}
@@ -19,6 +15,19 @@
 
     # - debug: msg="using ami {{image}}"
     # - debug: msg="user_data {{user_data}}"
+
+    # - debug: msg="{{regions}}"
+    # - debug: msg="{{first_regions}}"
+    # - debug: msg="{{use_regions}}"
+
+    # - debug: msg="{{item.key}}"
+    #   with_dict: regions
+
+    # - debug: msg="{{item.key}}"
+    #   with_dict: first_regions
+  
+    # - debug: msg="{{item.key}}"
+    #   with_dict: use_regions
 
 
     - name: Launch DB server instances
@@ -39,7 +48,7 @@
           ephemeral: ephemeral1
         wait: yes
       register: ec2_cluster
-      with_dict: regions
+      with_dict: use_regions
 
     - name: Add instances to host group
       local_action: add_host name={{item.1.public_ip}} groupname=NewDB
@@ -49,24 +58,24 @@
 
     - name: Add instances to private ip group
       local_action: add_host name={{item.1.private_ip}} groupname=DBPrivate
-      when: not use_reflector|bool
+      when: not ec2_multiregion|bool
       with_subelements:
         - ec2_cluster.results
         - instances
 
     - name: Add instance 0 to seeds group
       local_action: add_host name={{ec2_cluster.results[0].instances[0].id}} groupname=Seeds
-      when: not use_reflector|bool
+      when: not ec2_multiregion|bool
 
       # use prive ip as seed in one region
     - name: Add instance 0 private ip as seed
       local_action: add_host name={{groups.DBPrivate[0]}} groupname=SeedsIp
-      when: not (use_reflector|bool or ec2_multiregion|bool)
+      when: not ec2_multiregion|bool
 
       # use public ip as seed in multi region
     - name: Add instance 0 public ip as seed
       local_action: add_host name={{groups.NewDB[0]}} groupname=SeedsIp
-      when: ec2_multiregion|bool and not use_reflector|bool
+      when: ec2_multiregion|bool 
 
     - name: Tag instances
       local_action: ec2_tag resource={{item.1.id}} region={{item.1.region}} state=present
@@ -86,7 +95,7 @@
       args:
         tags:
           seed: "true"
-      when: not use_reflector|bool
+      when: not ec2_multiregion|bool
 
     - name: Give everyone a minute or two
       pause: seconds=120

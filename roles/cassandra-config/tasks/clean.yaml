@@ -1,3 +1,4 @@
 ---
 - service: name=cassandra enabled=yes pattern=cassandra state=stopped
-- shell: rm -rf {{data_dir}}/data
+- shell: rm -rf {{data_dir}}/
+

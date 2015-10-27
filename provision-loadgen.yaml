@@ -16,7 +16,7 @@
         count: "{{ load_nodes}}"
         wait: yes
       register: ec2_load
-      with_dict: regions
+      with_dict: use_regions
 
     - name: Add instances to host group
       local_action: add_host name={{item.1.public_ip}} groupname="CassandraLoadgen"

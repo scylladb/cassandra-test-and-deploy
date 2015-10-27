@@ -2,10 +2,8 @@
 
 A framework for running and automating Scylla/Cassandra stress tests on Amazon EC2.
 
-This repository contains Ansible playbooks and scripts for running
-Scylla/Cassandra performance tests on EC2 with multiple DB servers and
-multiple cassandra-stress loaders, as well as adding, stopping and
-starting nodes.
+This repository contains Ansible playbooks and scripts for running Scylla/Cassandra **multi region** performance tests on EC2 with multiple DB servers and multiple cassandra-stress loaders, as well as adding, stopping and starting nodes.
+
 
 ### Introduction
 The following will compare Scylla cluster to Cassandra cluster performance on EC2, using 6 loader servers
@@ -34,12 +32,12 @@ export AWS_ACCESS_KEY_ID=<...>
 export AWS_SECRET_ACCESS_KEY=<...>
 ```
 
-Make sure your EC2 SSH key is included in the keychain:
+Make sure your EC2 SSH keys for each EC2 region is included in the keychain:
 
 ```sh
 ssh-add <key-file>
 ```
-**You should do it for each of EC2 zones!**
+**You should do it for each of EC2 region!**
 
 To avoid prompting for SSH key confirmation
 ```
@@ -62,16 +60,10 @@ export ANSIBLE_EC2_PREFIX=tzach
 ```
 
 ### Setup
-
-The default EC2 region and zone are region: us-west-2 and us-west-2b,
-as define in ```inventories/ec2/group_vars/all.yaml```
-To use a different region, either update the file, or use
-
-```
--e region=your-region -e zone=your-zone
-```
-for all command below
-
+The default setup is using one region for all nodes, and the reflector to attache them to a cluster.
+To test a multi region setup, use ```-e ec2_multiregion``` as an extra parameter for the setup commands below.
+The default EC2 regions are define in ```inventories/ec2/group_vars/all.yaml```, with the AMI, security group, and key-pair per region.
+**You must update the key-pair** to your own.
 
 #### Create security group
 The following will create a EC2 security group called
@@ -92,7 +84,7 @@ Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
 ```
 
   **options**
-  * ```-e "cluster_nodes=2"``` - number of cluster nodes (default 2)
+  * ```-e "cluster_nodes=2"``` - number of nodes **per region** (default 2)
   * ```-e "instance_type=c3.8xlarge"``` - type of EC2 instance
 
 Server are created with EC2 name *DB*, and tag "server=scylla"
@@ -105,7 +97,7 @@ Cassandra servers launch from AMI, base on Ubuntu 14 (login ubuntu)
 ```
 
   **options**
-  * ```-e "cluster_nodes=2"``` - number of cluster nodes (default 2)
+  * ```-e "cluster_nodes=2"``` - number of nodes **per region**  (default 2)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "num_tokens=6"``` - set number of vnode per server
 
@@ -119,7 +111,7 @@ Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including 
 ```
 
   **options**
-  * ```-e "load_nodes=2"``` - number of loaders  (default 2)
+  * ```-e "load_nodes=2"``` - number of loaders **per region** (default 2)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
 
 #### Add nodes to existing cluster
@@ -142,6 +134,12 @@ Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including 
 ```
 ./ec2-stress.sh <iterations> -e "load_name=late_night" -e "server=scylla" <more options>
 ```
+
+for multi region:
+```
+./ec2-stress.sh 1 -e "load_name=cassandra.c3.8xlarge.v21" -e "server=cassandra" -e "stress_options='-schema \"replication(strategy=NetworkTopologyStrategy,us-east_test=1,us-west-2_test1=1)\"'"
+```
+
 
 **Options**
 All parameters are available at

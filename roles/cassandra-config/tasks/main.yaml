@@ -3,8 +3,7 @@
   action: ec2_facts
 
 # stop the service and clean data with wrong config file
-- service: name=cassandra enabled=yes pattern=cassandra state=stopped
-- shell: rm -rf {{data_dir}}/data
+- include: clean.yaml
 
 # use exisiting nodes as seed, even if they are not
 # TBD find public IP in case of multi region

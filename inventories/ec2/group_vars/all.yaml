@@ -1,7 +1,5 @@
 ---
 # EC2 specific vars
-setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"
-
 regions:
   us-west-2:
     cassandra_ami: ami-1cff962c
@@ -18,6 +16,15 @@ regions:
     key_name: tzach-virginia
     security_group: cassandra-security-group
 
+# list of only the first region
+first_regions:
+  us-west-2: "{{regions['us-west-2']}}"
+
+
+ec2_multiregion: false
+
+use_regions: "{%if ec2_multiregion | bool %}{{regions}}{%else%}{{first_regions}}{%endif%}" 
+
 graphite_login: ubuntu
 cassandra_login: ubuntu
 scylla_login: fedora
@@ -25,7 +32,9 @@ loader_login: fedora
 
 instance_type: c3.8xlarge
 
-ec2_multiregion: false
+
+
+setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"
 
 # graphite Server
 graphite_server_type: m3.large
