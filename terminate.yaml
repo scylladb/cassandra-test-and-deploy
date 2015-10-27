@@ -12,9 +12,9 @@
   tasks:
     - name: Terminate instance(s)
       ec2:
-        instance_ids: "{{ ec2_id }}"
-        region: "{{ region }}"
-        state: absent
+       instance_ids: "{{ ec2_id }}"
+       region: "{{ ec2_region }}"
+       state: absent
 
 - name: Find CassandraLoadgen instance(s)
   hosts: CassandraLoadgen
@@ -30,5 +30,5 @@
     - name: Terminate instance(s)
       ec2:
         instance_ids: "{{ ec2_id }}"
-        region: "{{ region }}"
+        region: "{{ ec2_region }}"
         state: absent

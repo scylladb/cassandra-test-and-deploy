@@ -1,0 +1,13 @@
+- name: Prepare scylla nodes
+  hosts: NewDB
+  user: "{{scylla_login}}"
+  roles:
+    - { role: scylla-config, sudo: yes, when: ec2_multiregion|bool or not use_db_ami|bool}
+
+- name: Run scylla nodes
+  hosts: NewDB
+  serial: 1
+  user: "{{scylla_login}}"
+  tasks:
+    - include: roles/scylla-config/tasks/start.yaml
+      when: ec2_multiregion|bool or not stopped|bool

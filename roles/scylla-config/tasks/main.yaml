@@ -8,7 +8,7 @@
 # use exisiting nodes as seed, even if they are not
 # TBD find public IP in case of multi region
 - command: echo "{{ hostvars[item].ec2_private_ip_address }}"
-  with_items: groups.Cassandra
+  with_items: groups.Scylla
   register: output
   changed_when: no
   when: add_node
@@ -32,5 +32,5 @@
   when: ec2_multiregion|bool
 
 
-- action: template src=cassandra.yaml dest=/etc/cassandra/cassandra.yaml mode="u=rw,g=r,o=r"
-- action: template src=cassandra-rackdc.properties dest=/etc/cassandra/cassandra-rackdc.properties mode="u=rw,g=r,o=r"
+- action: template src=scylla.yaml dest=/var/lib/scylla/conf/scylla.yaml mode="u=rw,g=r,o=r"
+- action: template src=cassandra-rackdc.properties dest=/var/lib/scylla/conf/cassandra-rackdc.properties mode="u=rw,g=r,o=r"

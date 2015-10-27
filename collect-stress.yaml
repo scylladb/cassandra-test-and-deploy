@@ -9,4 +9,4 @@
 
     - include: upload-to-s3.yaml suffix="sum"
     - include: upload-to-s3.yaml suffix="avg"
-    - include: dump-parameters.yaml
+#    - include: dump-parameters.yaml

@@ -38,3 +38,5 @@ use_db_ami: true
 
 # Let the AMI use the reflector and set the cluster. Will not work for Multi DC deployment
 use_reflector: true
+
+dc_suffix: _test

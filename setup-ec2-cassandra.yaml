@@ -1,3 +1,3 @@
 ---
-- include: provision-db.yaml db_ami={{cassandra_ami}}  db=cassandra db_version=community
+- include: provision-db.yaml db=cassandra db_version=community
 - include: prepare-cassandra.yaml

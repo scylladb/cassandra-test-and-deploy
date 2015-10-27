@@ -3,11 +3,11 @@
   hosts: "Cassandra:&Origin:!Stopped"
   user: "{{cassandra_login}}"
   tasks:
-    - { include: roles/cassandra/tasks/clean.yaml, sudo: yes , when: clean_data == 'true' }
+    - { include: roles/cassandra-config/tasks/clean.yaml, sudo: yes , when: clean_data | bool }
 
 - name: Restart Service - one by one
   hosts: "Cassandra:&Origin:!Stopped"
   user: "{{cassandra_login}}"
   serial: 1
   tasks:
-    - { include: roles/cassandra/tasks/start.yaml, when: clean_data == 'true' }
+    - { include: roles/cassandra-config/tasks/start.yaml, when: clean_data | bool }
