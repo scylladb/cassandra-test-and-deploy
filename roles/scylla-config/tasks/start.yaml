@@ -1,7 +1,14 @@
 ---
 - name: start scylla service
-  action: service name=scylla-server enabled=yes pattern=scylla state=restarted
+  action: service name=scylla-server enabled=yes state=restarted
   sudo: yes
+
+## scylla-jmx goes down if scylla-server goes down, but not the other way around.
+## See issue https://github.com/scylladb/scylla/issues/504
+- name: start scylla-jmx service
+  action: service name=scylla-jmx enabled=yes state=restarted
+  sudo: yes
+
 - name: Gather facts
   action: ec2_facts
 

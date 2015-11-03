@@ -2,15 +2,15 @@
 # EC2 specific vars
 regions:
   us-west-2:
-    cassandra_ami: ami-1cff962c
-    scylla_ami: ami-70bd5c43 # scylla 0.10
+    cassandra_ami: ami-36617657
+    scylla_ami:  ami-866374e7 # scylla 0.11
     loadgen_image: ami-3f68640f # ubuntu 14.04
     ubuntu_image: ami-3f68640f # ubuntu 14.04
     key_name: tzach-oregon
     security_group: cassandra-security-group
   us-east-1:
     cassandra_ami: ami-ada2b6c4
-    scylla_ami: ami-69a1ea0c # scylla 0.10
+    scylla_ami:  ami-72196418 # scylla 0.11
     loadgen_image: ami-d05e75b8 # ubuntu 14.04
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     key_name: tzach-virginia
