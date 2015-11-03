@@ -59,7 +59,7 @@ export ANSIBLE_EC2_PREFIX=tzach
 
 ### Setup
 The default setup is using one region for all nodes, and the reflector to attache them to a cluster.
-To test a multi region setup, use ```-e ec2_multiregion``` as an extra parameter for the setup commands below.
+To test a multi region setup, use ```-e "ec2_multiregion=true"``` as an extra parameter for the setup commands below.
 The default EC2 regions are define in ```inventories/ec2/group_vars/all.yaml```, with the AMI, security group, and key-pair per region. **You must update the key-pair** to your own.
 
 #### Create security group
@@ -79,7 +79,7 @@ Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
   **options**
   * ```-e "cluster_nodes=2"``` - number of nodes **per region** (default 2)
   * ```-e "instance_type=c3.8xlarge"``` - type of EC2 instance
-  * ```-e ec2_multiregion```- a multi region EC2 deployment **[does not work yet!]**
+  * ```-e ec2_multiregion=true```- a multi region EC2 deployment **[does not work yet!]**
   * ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
 
 Server are created with EC2 name *DB*, and tag "server=Scylla"
@@ -95,7 +95,7 @@ Cassandra servers launch from AMI, base on Ubuntu 14 (login ubuntu)
   * ```-e "cluster_nodes=2"``` - number of nodes **per region**  (default 2)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "num_tokens=6"``` - set number of vnode per server
-  * ```-e ec2_multiregion``` - a multi region EC2 deployment
+  * ```-e ec2_multiregion=true``` - a multi region EC2 deployment
   ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
 
 Server are created with EC2 name *DB*, and tag "server=Cassandra"
@@ -120,7 +120,7 @@ Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including 
   * ```-e "stopped=true"``` - start server is stopped state
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "cluster_nodes=2"``` - number of nodes to add (default is 2)
-  * ```-e ec2_multiregion```- a multi region EC2 deployment
+  * ```-e ec2_multiregion=true```- a multi region EC2 deployment
 
 #### Start stopped nodes (one by one)
 ```
