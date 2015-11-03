@@ -1,0 +1,5 @@
+- name: set collectd server
+  replace: dest=/etc/sysconfig/scylla-server
+           backup=yes
+           regexp='SCYLLA_ARGS="(.*)"'
+           replace='SCYLLA_ARGS="\1 --collectd-address={{collectd_server}}:{{collectd_server_port}} --collectd=1"'

@@ -24,6 +24,13 @@
             to_port: 8080
             cidr_ip: 0.0.0.0/0
           - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - from_port: 8081
+            to_port: 8081
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
             from_port: 7000
             to_port: 7000
             cidr_ip: 0.0.0.0/0
@@ -55,7 +62,7 @@
           - proto: udp
             from_port: 25826
             to_port: 25826
-            group_name: "{{security_group}}"
+            cidr_ip: 0.0.0.0/0
           - proto: udp
             from_port: 5555
             to_port: 5555
@@ -71,7 +78,7 @@
           - proto: tcp
             from_port: 4567
             to_port: 4567
-            group_name: "{{security_group}}"
+            cidr_ip: 0.0.0.0/0
           - proto: tcp
             from_port: 2003
             to_port: 2003

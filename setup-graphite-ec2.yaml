@@ -1,4 +1,0 @@
----
-- include: provision-graphite-server.yaml
-- include: prepare-graphite.yaml graphite_listen_ip={{groups.GraphiteServer[0]}}
-
