@@ -96,6 +96,7 @@ Cassandra servers launch from AMI, base on Ubuntu 14 (login ubuntu)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "num_tokens=6"``` - set number of vnode per server
   * ```-e ec2_multiregion``` - a multi region EC2 deployment
+  ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
 
 Server are created with EC2 name *DB*, and tag "server=Cassandra"
 

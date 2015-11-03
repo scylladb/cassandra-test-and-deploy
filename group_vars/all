@@ -30,7 +30,7 @@ s3_buckt: cassandra.test
 upload_to_s3: false
 wait_after_adding_server: 120
 
-collect_server_port: 25826
+collectd_server_port: 25826
 
 # use a ready made DB AMI, skipping the install part (save time!)
 use_db_ami: true

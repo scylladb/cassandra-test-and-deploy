@@ -7,7 +7,7 @@
     - collectd
 
 - name: add libjvm.so to lib path
-  lineinfile: dest=/etc/default/collectd line="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:{{java_lib_path}}"
+  lineinfile: dest=/etc/default/collectd line="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:{{java_home}}"
 
 - set_fact: node="cassandra-{{ansible_hostname }}"
 
