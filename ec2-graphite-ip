@@ -1,3 +1,0 @@
-#!/bin/sh
-
-ansible -i inventories/ec2/ GraphiteServer --limit "tag_user_`echo $ANSIBLE_EC2_PREFIX`" -u ubuntu -m command -a "ifconfig eth0" | grep "inet add" | grep -v 127.0.0.1 | cut -d: -f2 | cut -d" " -f1 | sed "s/^/\"\'/" | sed "s/$/\'\"/" | xargs | sed -e 's/ /,/g'

@@ -25,14 +25,13 @@ profile_git: false
 profile_dir: /tmp/cassandra-stress-profiles/
 profile_file: false
 
-
-
 #others
 s3_buckt: cassandra.test
 upload_to_s3: false
 wait_after_adding_server: 120
 
-collect_server_ip: 127.0.0.1 #override this value to send metrics to the actual server
+collect_server_port: 25826
+
 # use a ready made DB AMI, skipping the install part (save time!)
 use_db_ami: true
 

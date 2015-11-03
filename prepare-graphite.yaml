@@ -1,7 +1,0 @@
-- name: Prepare Graphite
-  hosts: GraphiteServer
-  user: "{{graphite_login}}"
-  roles:
-    - {role: graphite, sudo: yes }
-    - {role: tessera, sudo: yes }
-    - { role: collectd-server, sudo: yes, tag: "collectd-server" }

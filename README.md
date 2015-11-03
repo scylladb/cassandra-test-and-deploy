@@ -80,6 +80,7 @@ Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
   * ```-e "cluster_nodes=2"``` - number of nodes **per region** (default 2)
   * ```-e "instance_type=c3.8xlarge"``` - type of EC2 instance
   * ```-e ec2_multiregion```- a multi region EC2 deployment **[does not work yet!]**
+  * ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
 
 Server are created with EC2 name *DB*, and tag "server=Scylla"
 
@@ -94,7 +95,7 @@ Cassandra servers launch from AMI, base on Ubuntu 14 (login ubuntu)
   * ```-e "cluster_nodes=2"``` - number of nodes **per region**  (default 2)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "num_tokens=6"``` - set number of vnode per server
-  * ```-e ec2_multiregion```- a multi region EC2 deployment
+  * ```-e ec2_multiregion``` - a multi region EC2 deployment
 
 Server are created with EC2 name *DB*, and tag "server=Cassandra"
 
