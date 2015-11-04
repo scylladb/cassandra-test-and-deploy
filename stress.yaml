@@ -27,19 +27,25 @@
     - set_fact: index={{ec2_tag_index}}
       when: index is not defined
 
+    - set_fact: taskset="taskset -c {{load_cpus}}"
+      when: load_cpus is defined
+
+    - set_fact: taskset=""
+      when: load_cpus is not defined
+
     - set_fact: log_file="{{remote_path}}{{output_file}}.{{ec2_region}}.{{index}}"
     - set_fact: range_start={{1 + (populate|int) * (index|int) }}
     - set_fact: range_end={{(populate|int) * (1 + (index|int)) }}
     - set_fact: range="{{range_start}}..{{range_end}}"
     - debug: msg="client key range {{range}}"
 
-    - debug: msg="cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}"
+    - debug: msg="{{taskset}} cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}"
 
-    - shell: sleep {{sleep_between_runs}}; cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}
+    - shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}
       when: not profile_file | bool
       ignore_errors: True
 
-    - shell: sleep {{sleep_between_runs}}; cassandra-stress user profile={{profile_file}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
+    - shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress user profile={{profile_file}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
       when: profile_file | bool
       ignore_errors: True
 
