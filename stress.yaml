@@ -33,6 +33,13 @@
     - set_fact: taskset=""
       when: load_cpus is not defined
 
+    - debug: msg="setting network IRQ affinity to CPU0"
+      when: load_cpus is defined
+
+    - shell: for irq in `cat  /proc/interrupts | grep eth0 | cut -d":" -f1`; do echo 1 > /proc/irq/$irq/smp_affinity; done
+      when: load_cpus is defined
+      sudo: yes
+
     - set_fact: log_file="{{remote_path}}{{output_file}}.{{ec2_region}}.{{index}}"
     - set_fact: range_start={{1 + (populate|int) * (index|int) }}
     - set_fact: range_end={{(populate|int) * (1 + (index|int)) }}
