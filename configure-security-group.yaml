@@ -27,7 +27,8 @@
             from_port: 80
             to_port: 80
             cidr_ip: 0.0.0.0/0
-          - from_port: 8081
+          - proto: tcp
+            from_port: 8081
             to_port: 8081
             cidr_ip: 0.0.0.0/0
           - proto: tcp
@@ -38,7 +39,6 @@
             from_port: 7001
             to_port: 7001
             group_name: "{{security_group}}"
-            cidr_ip: 0.0.0.0/0
           - proto: tcp
             from_port: 7199
             to_port: 7199
