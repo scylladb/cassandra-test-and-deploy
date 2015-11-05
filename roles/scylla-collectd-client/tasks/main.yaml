@@ -1,5 +1,17 @@
+- name: Gather facts
+  action: ec2_facts
+
+- set_fact: node="scylla-{{ansible_hostname }}"
+
 - name: set collectd server
   replace: dest=/etc/sysconfig/scylla-server
            backup=yes
            regexp='SCYLLA_ARGS="(.*)"'
-           replace='SCYLLA_ARGS="\1 --collectd-address={{collectd_server}}:{{collectd_server_port}} --collectd=1"'
+           replace='SCYLLA_ARGS="\1 --collectd-address={{collectd_server}}:{{collectd_server_port}} --collectd=1 --collectd-hostname={{node}} --collectd-poll-period 3000"'
+
+- name: install collectd client
+  dnf: name=collectd state=latest
+
+- action: template src=collectd-client.conf dest=/etc/collectd.conf owner=root group=root
+  notify:
+    - restart collectd
