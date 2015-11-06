@@ -1,5 +1,10 @@
 ---
-- service: name=scylla-server enabled=yes state=stopped
+- name: Update repo
+  action: template src=scylla.repo dest=/etc/yum.repos.d/scylla.repo owner=root group=root
+  sudo: yes
+
+- name: Install Scylla tools
+  dnf: name=scylla-tools
   sudo: yes
 
 - name: Gather facts

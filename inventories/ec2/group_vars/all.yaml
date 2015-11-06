@@ -6,6 +6,7 @@ regions:
     scylla_ami:  ami-36617657 # scylla 0.11
     loadgen_image: ami-3f68640f # ubuntu 14.04
     ubuntu_image: ami-3f68640f # ubuntu 14.04
+    fedora_ami: ami-05f4ed35 # fedora 22
     key_name: tzach-oregon
     security_group: cassandra-security-group
   us-east-1:
@@ -13,12 +14,13 @@ regions:
     scylla_ami:  ami-72196418 # scylla 0.11
     loadgen_image: ami-d05e75b8 # ubuntu 14.04
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
+    fedora_ami: ami-a51564c0 # fedora 22
     key_name: tzach-virginia
     security_group: cassandra-security-group
 
 # list of only the first region
 first_regions:
-  us-west-2: "{{regions['us-west-2']}}"
+  us-east-1: "{{regions['us-east-1']}}"
 
 
 ec2_multiregion: false
