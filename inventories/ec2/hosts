@@ -9,8 +9,6 @@
 
 [tag_seed_true]
 
-[tag_Name_GraphiteServer]
-
 [DB:children]
 tag_Name_DB
 
@@ -26,9 +24,6 @@ tag_server_scylla
 
 [Stopped:children]
 tag_stopped_true
-
-[GraphiteServer:children]
-tag_Name_GraphiteServer
 
 [SeedsExIP:children]
 tag_seed_true
