@@ -1,6 +1,16 @@
 - name: Prepare scylla nodes
   hosts: NewDB
   user: "{{scylla_login}}"
+  tasks:
+    - name: Gather facts
+      action: ec2_facts
+
+    - name: wait for scylla service to complete its init procedures
+      wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042
+
+- name: Prepare scylla nodes
+  hosts: NewDB
+  user: "{{scylla_login}}"
   roles:
     - { role: scylla-config, sudo: yes, when: ec2_multiregion|bool or not use_db_ami|bool}
     - { role: scylla-collectd-client, sudo: yes, when: collectd_server is defined }
