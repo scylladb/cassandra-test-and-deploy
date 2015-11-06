@@ -25,17 +25,10 @@ ec2_multiregion: false
 
 use_regions: "{%if ec2_multiregion | bool %}{{regions}}{%else%}{{first_regions}}{%endif%}" 
 
-graphite_login: ubuntu
 cassandra_login: ubuntu
 scylla_login: fedora
 loader_login: fedora
 
 instance_type: c3.8xlarge
 
-
-
 setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"
-
-# graphite Server
-graphite_server_type: m3.large
-graphite_image: ami-29ebb519 # ubuntu
