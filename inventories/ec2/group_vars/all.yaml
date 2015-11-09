@@ -20,7 +20,7 @@ regions:
 
 # list of only the first region
 first_regions:
-  us-east-1: "{{regions['us-east-1']}}"
+  us-west-2: "{{regions['us-west-2']}}"
 
 
 ec2_multiregion: false
