@@ -12,7 +12,7 @@
         keypair: "{{item.value.key_name}}"
         group: "{{item.value.security_group}}"
         instance_type: "{{instance_type}}"
-        image: "{{item.value.scylla_ami}}"
+        image: "{{item.value.fedora_ami}}"
         count: "{{ load_nodes}}"
         wait: yes
       register: ec2_load
