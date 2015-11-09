@@ -65,7 +65,7 @@ The default EC2 regions are define in ```inventories/ec2/group_vars/all.yaml```,
 #### Create security group
 The following will create a EC2 security group called "cassandra-security-group", which is later used for all EC2 servers.
 ```
-ansible-playbook -i inventories/ec2/ configure-security-group.yaml -e "security_group=cassandra-security-group" -e "region=your-ec2-region" -e "-e "vpc_id=your-vpc"
+ansible-playbook -i inventories/ec2/ configure-security-group.yaml -e "security_group=cassandra-security-group" -e "region=your-ec2-region" -e "vpc_id=your-vpc"
 ```
 You only need to run this once. Once security group exists, there is no need to repeat this step. You can use a different security group by adding ```-e "security_group=your_group_name"``` option to all ec2-setup-* scripts below.
 
