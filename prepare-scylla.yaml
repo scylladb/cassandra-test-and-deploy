@@ -6,7 +6,7 @@
       action: ec2_facts
 
     - name: wait for scylla service to complete its init procedures
-      wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042
+      wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042 timeout=600
 
 - name: Prepare scylla nodes
   hosts: NewDB
