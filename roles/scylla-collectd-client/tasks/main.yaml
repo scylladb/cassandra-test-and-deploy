@@ -12,6 +12,9 @@
 - name: install collectd client
   dnf: name=collectd state=latest
 
+- name: install collectd-netlink plugin
+  dnf: name=collectd-netlink state=latest
+
 - action: template src=collectd-client.conf dest=/etc/collectd.conf owner=root group=root
   notify:
     - restart collectd
