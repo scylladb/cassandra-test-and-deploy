@@ -46,14 +46,12 @@
     - set_fact: range="{{range_start}}..{{range_end}}"
     - debug: msg="client key range {{range}}"
 
-    - debug: msg="{{taskset}} cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}"
-
     - shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}
-      when: not profile_file | bool
+      when: profile_file is undefined
       ignore_errors: True
 
     - shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress user profile={{profile_file}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
-      when: profile_file | bool
+      when: profile_file is defined
       ignore_errors: True
 
     - fetch: src={{log_file}}.{{iteration}}.data dest={{home_path}}{{output_file}}.{{ec2_region}}.{{index}}.{{iteration}}.data flat=yes

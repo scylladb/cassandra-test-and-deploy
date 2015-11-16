@@ -6,7 +6,7 @@
   tasks:
     - name: git clone profile_git
       git: repo={{profile_git}} dest={{profile_dir}}
-      when: not profile_git == false
+      when: profile_git is defined
 
 - name: upload stress file to loaders
   hosts: "CassandraLoadgen"
@@ -14,7 +14,7 @@
   tasks:
     - name: Creates directory
       file: path="~/{{profile_file | dirname }}" state=directory
-      when: not profile_file == false
+      when: profile_file is defined
     - name: upload file
       copy: src="{{profile_dir}}/{{profile_file}}" dest=~/{{profile_file}}
-      when: not profile_file == false
+      when: profile_file is defined
