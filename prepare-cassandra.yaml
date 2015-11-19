@@ -1,3 +1,12 @@
+- name: Prepare scylla nodes
+  hosts: NewDB
+  user: "{{cassandra_login}}"
+  tasks:
+    - name: Gather facts
+      action: ec2_facts
+    - name: wait for cassandra service to complete its init procedures
+      wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042
+
 - name: Prepare Cassandra nodes
   hosts: NewDB
   user: "{{cassandra_login}}"
