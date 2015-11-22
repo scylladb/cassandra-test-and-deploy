@@ -3,7 +3,7 @@
 regions:
   us-west-2:
     cassandra_ami: ami-1cff962c # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami:  ami-36617657 # scylla 0.11
+    scylla_ami:  ami-458b9b24 # scylla 0.12
     loadgen_image: ami-3f68640f # ubuntu 14.04
     ubuntu_image: ami-3f68640f # ubuntu 14.04
     fedora_ami: ami-05f4ed35 # fedora 22
@@ -11,7 +11,7 @@ regions:
     security_group: cassandra-security-group
   us-east-1:
     cassandra_ami: ami-ada2b6c4 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami:  ami-72196418 # scylla 0.11
+    scylla_ami:  ami-e08ccb8a # scylla 0.12
     loadgen_image: ami-d05e75b8 # ubuntu 14.04
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     fedora_ami: ami-a51564c0 # fedora 22
