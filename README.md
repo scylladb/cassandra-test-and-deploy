@@ -79,7 +79,7 @@ Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
   **options**
   * ```-e "cluster_nodes=2"``` - number of nodes **per region** (default 2)
   * ```-e "instance_type=c3.8xlarge"``` - type of EC2 instance
-  * ```-e ec2_multiregion=true```- a multi region EC2 deployment **[does not work yet!]**
+  * ```-e "ec2_multiregion=true"```- a multi region EC2 deployment **[does not work yet!]**
   * ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
 
 Server are created with EC2 name *DB*, and tag "server=Scylla"
