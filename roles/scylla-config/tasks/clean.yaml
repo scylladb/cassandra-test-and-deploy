@@ -1,3 +1,3 @@
 - service: name=scylla-server enabled=yes state=stopped
-- shell: rm -rf {{data_dir}}/data
-- shell: rm -rf {{data_dir}}/commitlog
+- shell: rm -rf {{data_dir}}/data/*
+- shell: rm -rf {{data_dir}}/commitlog/*
