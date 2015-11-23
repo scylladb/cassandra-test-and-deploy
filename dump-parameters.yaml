@@ -11,7 +11,7 @@
 - name: write parameters to file
   local_action: lineinfile
     dest="{{dest_name}}"
-    line="cassandra_image"':'" {{image}}\nloadgen_image"':'" {{loadgen_image}}\ncluster_nodes"':'" {{cluster_nodes}}\nload_nodes"':'" {{load_nodes}}\ninstance_type"':'" {{instance_type}}\ncommand"':'" {{command}}\nstress_options"':'" {{stress_options}}\n\npopulate"':'" {{populate}}"
+    line="cassandra_image"':'" {{image}}\ncluster_nodes"':'" {{cluster_nodes}}\nload_nodes"':'" {{load_nodes}}\ninstance_type"':'" {{instance_type}}\ncommand"':'" {{command}}\nstress_options"':'" {{stress_options}}\n\npopulate"':'" {{populate}}"
     create=True
 - include: upload-to-s3.yaml suffix="params"
 
