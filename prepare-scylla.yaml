@@ -17,8 +17,7 @@
 
 - name: Run scylla nodes
   hosts: NewDB
-  serial: 1
   user: "{{scylla_login}}"
   tasks:
     - include: roles/scylla-config/tasks/start.yaml
-      when: ec2_multiregion|bool or not stopped|bool or collectd_server is defined
+      when: not stopped|bool and (ec2_multiregion|bool or collectd_server is defined)

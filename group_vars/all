@@ -26,7 +26,7 @@ profile_dir: /tmp/cassandra-stress-profiles/
 #others
 s3_buckt: cassandra.test
 upload_to_s3: false
-wait_after_adding_server: 120
+wait_after_adding_server: 10
 
 collectd_server_port: 25826
 

@@ -37,6 +37,11 @@
         image: "{{item.value[image]}}"
         count: "{{cluster_nodes}}"
         user_data: "{{user_data}}"
+        instance_tags:
+          Name: "DB"
+          server: "{{db}}"
+          stopped: "{{stopped}}"
+          user: "{{setup_name}}"
         volumes:
         - device_name: /dev/sdb
           ephemeral: ephemeral0
@@ -78,18 +83,6 @@
     - name: Add instance 0 public ip as seed
       local_action: add_host name={{groups.NewDB[0]}} groupname=SeedsIp
       when: ec2_multiregion|bool 
-
-    - name: Tag instances
-      local_action: ec2_tag resource={{item.1.id}} region={{item.1.region}} state=present
-      with_subelements:
-        - ec2_cluster.results
-        - instances
-      args:
-        tags:
-          Name: "DB"
-          server: "{{db}}"
-          stopped: "{{stopped}}"
-          user: "{{setup_name}}"
 
     - name: Tag Seed instances
       local_action: ec2_tag resource={{item}} region={{ec2_cluster.results[0].instances[0].region}} state=present
