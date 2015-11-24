@@ -79,7 +79,7 @@ Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
   **options**
   * ```-e "cluster_nodes=2"``` - number of nodes **per region** (default 2)
   * ```-e "instance_type=c3.8xlarge"``` - type of EC2 instance
-  * ```-e "ec2_multiregion=true"```- a multi region EC2 deployment **[does not work yet!]**
+  * ```-e "ec2_multiregion=true"```- a multi region EC2 deployment
   * ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
 
 Server are created with EC2 name *DB*, and tag "server=Scylla"
@@ -154,6 +154,7 @@ notation. Examples below:
 * ```-e "command_options=duration=60m"```
 * ```-e "threads=200"```
 * ```-e "profile_dir=/tmp/cassandra-stress-profiles/" -e "profile_file=cust_a/users/users1.yaml" -e "command_options=ops\\(insert=1\\)"```
+* ```-e "clean_data=true"``` - clean all data from DB servers and restart them before starting the stress
 
 Make sure **load name is unique**  so the new results will not
 override an old run in the same day.
@@ -191,7 +192,6 @@ The next stress test will restart the Cassandra service.
 
 ## Todo
 Scylla cluster does not yet support:
-* clean_data option, to clean data files before each stress
 * ec2-add-node-to-cluster, ec2-start-server.sh and ec2-stop-server.sh
 
 
