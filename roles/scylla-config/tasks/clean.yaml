@@ -1,3 +1,6 @@
 - service: name=scylla-server enabled=yes state=stopped
-- shell: rm -rf {{data_dir}}/data/*
-- shell: rm -rf {{data_dir}}/commitlog/*
+- debug: msg="clean {{data_dir}}"
+- file: path={{data_dir}}/data state=absent
+- file: path={{data_dir}}/commitlog state=absent
+- file: path={{data_dir}}/data state=directory owner=scylla group=scylla
+- file: path={{data_dir}}/commitlog state=directory owner=scylla group=scylla

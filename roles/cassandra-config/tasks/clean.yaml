@@ -1,4 +1,8 @@
 ---
 - service: name=cassandra enabled=yes pattern=cassandra state=stopped
-- shell: rm -rf {{data_dir}}/
+- debug: msg="clean {{data_dir}}"
+- file: path={{data_dir}}/data state=absent
+- file: path={{data_dir}}/commitlog state=absent
+- file: path={{data_dir}}/saved_caches state=absent
+
 
