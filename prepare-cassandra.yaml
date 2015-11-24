@@ -17,8 +17,7 @@
 
 - name: Run Cassandra nodes
   hosts: NewDB
-  serial: 1
   user: "{{cassandra_login}}"
   tasks:
     - include: roles/cassandra-config/tasks/start.yaml
-      when: ec2_multiregion|bool or not stopped|bool
+      when: not stopped|bool and (ec2_multiregion|bool or collectd_server is defined)
