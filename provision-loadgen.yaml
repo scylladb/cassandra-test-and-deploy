@@ -14,6 +14,9 @@
         instance_type: "{{instance_type}}"
         image: "{{item.value.fedora_ami}}"
         count: "{{ load_nodes}}"
+        instance_tags:
+          Name: "CassandraLoadgen"
+          user: "{{setup_name}}"
         wait: yes
       register: ec2_load
       with_dict: use_regions
@@ -29,13 +32,3 @@
       with_subelements:
         - ec2_load.results
         - instances
-
-    - name: Tag instances
-      local_action: ec2_tag resource={{item.1.id}} region={{item.1.region}} state=present
-      with_subelements:
-        - ec2_load.results
-        - instances
-      args:
-        tags:
-          Name: "CassandraLoadgen"
-          user: "{{setup_name}}"
