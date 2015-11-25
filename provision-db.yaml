@@ -33,6 +33,8 @@
         region: "{{item.key}}"
         keypair: "{{item.value.key_name}}"
         group: "{{item.value.security_group}}"
+        vpc_subnet_id: "{{item.value.vpc_subnet_id}}"
+        assign_public_ip: yes
         instance_type: "{{instance_type}}"
         image: "{{item.value[image]}}"
         count: "{{cluster_nodes}}"

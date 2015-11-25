@@ -7,20 +7,23 @@ regions:
     ubuntu_image: ami-3f68640f # ubuntu 14.04
     fedora_ami: ami-05f4ed35 # fedora 22
     key_name: tzach-oregon
-    security_group: cassandra-security-group
+    security_group: cassandra-security-group # make sure security group is corralte to vpc
+    vpc_subnet_id: subnet-5207ee37
   us-east-1:
     cassandra_ami: ami-ada2b6c4 # DataStax Auto-Clustering AMI 2.5.1-hvm
     scylla_ami:  ami-e08ccb8a # scylla 0.12
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     fedora_ami: ami-a51564c0 # fedora 22
     key_name: tzach-virginia
-    security_group: cassandra-security-group
+    security_group: cassandra-security-group # make sure security group is corralte to vpc
+    vpc_subnet_id: subnet-ec4a72c4
   us-west-1:
     cassandra_ami: ami-3cf7c979 # DataStax Auto-Clustering AMI 2.5.1-hvm
     scylla_ami: ami-f0026b90 # scylla 0.12
     fedora_ami: ami-c9e21e8d # fedora 22
     key_name: tzach-california
-    security_group: cassandra-security-group
+    security_group: cassandra-security-group # make sure security group is corralte to vpc
+    vpc_subnet_id: subnet-10a04c75
 
 # subset of the region use when ec2_multiregion is false
 first_regions:
