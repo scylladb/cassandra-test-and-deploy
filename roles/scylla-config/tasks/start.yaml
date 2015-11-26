@@ -5,6 +5,9 @@
 
 ## scylla-jmx goes down if scylla-server goes down, but not the other way around.
 ## See issue https://github.com/scylladb/scylla/issues/504
+- name: wait for scylla service to complete its init procedures
+  wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042 timeout=600
+
 - name: start scylla-jmx service
   action: service name=scylla-jmx enabled=yes state=restarted
   sudo: yes
