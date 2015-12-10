@@ -9,6 +9,8 @@
     iteration: 0 # overload me
     server: "Scylla"
   tasks:
+    - set_fact: loader_ip="{{ansible_eth0.ipv4.address}}"
+
     - name: Gather facts
       action: ec2_facts
 
@@ -24,9 +26,6 @@
 
     - debug: msg="ip_list is {{ip_list}}"
 
-    - set_fact: index={{ec2_tag_index}}
-      when: index is not defined
-
     - set_fact: taskset="taskset -c {{load_cpus}}"
       when: load_cpus is defined
 
@@ -40,13 +39,9 @@
       when: load_cpus is defined
       sudo: yes
 
-    - set_fact: log_file="{{remote_path}}{{output_file}}.{{ec2_region}}.{{index}}"
-    - set_fact: range_start={{1 + (populate|int) * (index|int) }}
-    - set_fact: range_end={{(populate|int) * (1 + (index|int)) }}
-    - set_fact: range="{{range_start}}..{{range_end}}"
-    - debug: msg="client key range {{range}}"
+    - set_fact: log_file="{{remote_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}"
 
-    - shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data -pop seq={{range}} {{stress_options}}
+    - shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
       when: profile_file is undefined
       ignore_errors: True
 
@@ -54,8 +49,8 @@
       when: profile_file is defined
       ignore_errors: True
 
-    - fetch: src={{log_file}}.{{iteration}}.data dest={{home_path}}{{output_file}}.{{ec2_region}}.{{index}}.{{iteration}}.data flat=yes
+    - fetch: src={{log_file}}.{{iteration}}.data dest={{home_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}.{{iteration}}.data flat=yes
       ignore_errors: True
 
-    - local_action: s3 bucket={{s3_buckt}} object={{output_file}}/{{output_file}}.{{ec2_region}}.{{index}}.{{iteration}} src={{home_path}}{{output_file}}.{{index}}.{{iteration}} mode=put
+    - local_action: s3 bucket={{s3_buckt}} object={{output_file}}/{{output_file}}.{{ec2_region}}.{{loader_ip}}.{{iteration}} src={{home_path}}{{output_file}}.{{loader_ip}}.{{iteration}} mode=put
       when: upload_to_s3
