@@ -12,7 +12,7 @@
   user: "{{cassandra_login}}"
   roles:
     - { role: cassandra-install, sudo: yes, when: not use_db_ami|bool}
-    - { role: cassandra-config, sudo: yes, when: ec2_multiregion|bool or not use_db_ami|bool}
+    - { role: cassandra-config, sudo: yes, when: ec2_multiregion|bool or add_node|bool or not use_db_ami|bool}
     - { role: collectd-client, sudo: yes, tag: "stress", when: collectd_server is defined}
 
 - name: Run Cassandra nodes
