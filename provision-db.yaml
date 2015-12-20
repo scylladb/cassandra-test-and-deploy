@@ -92,4 +92,4 @@
       args:
         tags:
           seed: "true"
-      when: not ec2_multiregion|bool
+      when: not (ec2_multiregion|bool or add_node|bool)
