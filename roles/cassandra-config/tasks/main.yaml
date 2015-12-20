@@ -34,3 +34,4 @@
 
 - action: template src=cassandra.yaml dest=/etc/cassandra/cassandra.yaml mode="u=rw,g=r,o=r"
 - action: template src=cassandra-rackdc.properties dest=/etc/cassandra/cassandra-rackdc.properties mode="u=rw,g=r,o=r"
+  when: ec2_multiregion|bool

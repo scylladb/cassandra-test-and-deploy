@@ -116,14 +116,15 @@ Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including 
 
 #### Add nodes to existing cluster
 ```
-./ec2-add-node-to-cluster.sh
+./ec2-add-node-to-cluster.sh -e "server=Cassandra"
 ```
-
   **options**
   * ```-e "stopped=true"``` - start server is stopped state
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "cluster_nodes=2"``` - number of nodes to add (default is 2)
   * ```-e ec2_multiregion=true```- a multi region EC2 deployment
+
+*Add node only works for Cassandra clusters*
 
 #### Start stopped nodes (one by one)
 ```

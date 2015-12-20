@@ -1,0 +1,3 @@
+---
+- include: provision-db.yaml db={{server|lower}} db_version=community add_node=true use_reflector=false
+- include: prepare-{{server|lower}}.yaml add_node=true
