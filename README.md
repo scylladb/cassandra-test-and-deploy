@@ -25,42 +25,54 @@ Make sure you installed the following:
 
 #### config
 
-Configure EC2 credentials:
+* Configure EC2 credentials:
 
 ```sh
 export AWS_ACCESS_KEY_ID=<...>
 export AWS_SECRET_ACCESS_KEY=<...>
 ```
 
-Make sure your EC2 SSH keys for each EC2 region is included in the keychain:
+* Make sure you have a ssh-agent running:
+
+```
+eval `ssh-agent -s`
+```
+
+* Make sure your EC2 SSH keys for each EC2 region is included in the keychain:
 
 ```sh
 ssh-add <key-file>
 ```
+
+key-file should have the right permission
+
+```
+chmod 200 key-file
+```
+
 **You should do it for each of EC2 region!**
 
-To avoid prompting for SSH key confirmation
+* Avoid prompting for SSH key confirmation by
 ```
 export ANSIBLE_HOST_KEY_CHECKING=False
 ```
-Make sure you have boto version 2.34.0 or above. To check boto version:
+* Make sure you have boto version 2.34.0 or above. To check boto version:
 ```
 pip show boto
 ```
-To update boto
+Update boto if required
 ```
 sudo pip install --upgrade boto
 ```
 
-To make sure your server use a unique name on EC2, set ANSIBLE_EC2_PREFIX
+* Make sure your server use a unique name on EC2, by setting ANSIBLE_EC2_PREFIX
 ```
 export ANSIBLE_EC2_PREFIX=tzach
 ```
 
-### Setup
-The default setup is using one region for all nodes, and the reflector to attache them to a cluster.
-To test a multi region setup, use ```-e "ec2_multiregion=true"``` as an extra parameter for the setup commands below.
-The default EC2 regions are define in ```inventories/ec2/group_vars/all.yaml```, with the AMI, security group, and key-pair per region. **You must update the key-pair, security_group and vpc_subnet_id** to your own.
+* The default EC2 regions are define in
+```inventories/ec2/group_vars/all.yaml```, with the *AMI*, *security group*, and *key-name* per region.
+**You must update the key_name, security_group and vpc_subnet_id** to your own.
 
 #### Create security group
 **Do this only if you do not already have a security group you can use**
