@@ -1,3 +1,3 @@
 #!/bin/sh
 
-ansible-playbook -i inventories/ec2/ setup-ec2-scylla.yaml -e "login_user=fedora" "$@"
+ansible-playbook setup-ec2-scylla.yaml -e "@inventories/ec2/group_vars/all.yaml" "$@"
