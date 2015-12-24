@@ -169,6 +169,9 @@ rpc_address: {{internal_ip}}
 # port for Thrift to listen for clients on
 rpc_port: 9160
 
+api_port: 10000
+api_address: 127.0.0.1
+
 ###################################################
 ## Not currently supported, reserved for future use
 ###################################################

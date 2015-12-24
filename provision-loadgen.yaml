@@ -8,7 +8,7 @@
     - name: Launch instances
       local_action:
         module: ec2
-        region: "{{item.key}}"
+        region: "{{item.value.region_name}}"
         keypair: "{{item.value.key_name}}"
         group: "{{item.value.security_group}}"
         vpc_subnet_id: "{{item.value.vpc_subnet_id}}"

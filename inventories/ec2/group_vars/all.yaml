@@ -1,43 +1,46 @@
 ---
 # EC2 specific vars
 regions:
-  us-west-2:
+  us-west-2 :
+    region_name: us-west-2
     cassandra_ami: ami-1cff962c # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami:  ami-458b9b24 # scylla 0.12
+    scylla_ami: ami-20776841  # scylla 0.13.2
     ubuntu_image: ami-3f68640f # ubuntu 14.04
     fedora_ami: ami-05f4ed35 # fedora 22
     key_name: tzach-oregon
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-5207ee37
   us-east-1:
+    region_name: us-east-1
     cassandra_ami: ami-ada2b6c4 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami:  ami-e08ccb8a # scylla 0.12
+    scylla_ami: ami-972863fd  # scylla 0.13.2
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     fedora_ami: ami-a51564c0 # fedora 22
     key_name: tzach-virginia
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-ec4a72c4
   us-west-1:
+    region_name: us-west-1
     cassandra_ami: ami-3cf7c979 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-f0026b90 # scylla 0.12
+    scylla_ami: ami-d6147fb6 # scylla 0.13.2
     fedora_ami: ami-c9e21e8d # fedora 22
     key_name: tzach-california
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-10a04c75
 
 # subset of the region use when ec2_multiregion is false
-first_regions:
-  us-west-2: "{{regions['us-west-2']}}"
-
+region_to_use: "us-west-2"
+region_to_use_data:
+  region_to_use: "{{regions[region_to_use]}}"
 
 ec2_multiregion: false
 
-use_regions: "{%if ec2_multiregion | bool %}{{regions}}{%else%}{{first_regions}}{%endif%}" 
+use_regions: "{%if ec2_multiregion | bool %}{{regions}}{%else%}{{region_to_use_data}}{%endif%}"
 
 cassandra_login: ubuntu
 scylla_login: fedora
 loader_login: fedora
 
-instance_type: c3.8xlarge
+instance_type: c3.2xlarge
 
 setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"

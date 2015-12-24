@@ -25,12 +25,11 @@
       when: use_db_ami == "false"
 
     - debug: msg="using {{image}}"
-    - debug: msg="user_data {{user_data}}"
 
     - name: Launch DB server instances
       local_action:
         module: ec2
-        region: "{{item.key}}"
+        region: "{{item.value.region_name}}"
         keypair: "{{item.value.key_name}}"
         group: "{{item.value.security_group}}"
         vpc_subnet_id: "{{item.value.vpc_subnet_id}}"
