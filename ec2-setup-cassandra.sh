@@ -1,3 +1,3 @@
 #!/bin/sh
 
-ansible-playbook -i inventories/ec2/ setup-ec2-cassandra.yaml "$@"
+ansible-playbook setup-ec2-cassandra.yaml -e "@inventories/ec2/group_vars/all.yaml" "$@"
