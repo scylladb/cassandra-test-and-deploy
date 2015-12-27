@@ -34,6 +34,8 @@
 
 - action: template src=scylla.yaml dest=/etc/scylla/scylla.yaml mode="u=rw,g=r,o=r"
 - action: template src=cassandra-rackdc.properties dest=/etc/scylla/cassandra-rackdc.properties mode="u=rw,g=r,o=r"
+  when: ec2_multiregion|bool
+
 - name: set api-address to localhost
   replace: dest=/etc/sysconfig/scylla-server
            backup=yes
