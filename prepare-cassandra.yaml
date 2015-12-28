@@ -5,7 +5,7 @@
     - name: Gather facts
       action: ec2_facts
     - name: wait for cassandra service to complete its init procedures
-      wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042
+      wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042 timeout=600
 
 - name: Prepare Cassandra nodes
   hosts: NewDB
@@ -20,4 +20,4 @@
   user: "{{cassandra_login}}"
   tasks:
     - include: roles/cassandra-config/tasks/start.yaml
-      when: not stopped|bool and (ec2_multiregion|bool or collectd_server is defined)
+      when: not stopped|bool and (ec2_multiregion|bool or add_node|bool or collectd_server is defined)

@@ -131,6 +131,7 @@ Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including 
 ./ec2-add-node-to-cluster.sh -e "server=Cassandra"
 ```
   **options**
+  * ```-e "server=[Cassandra|Scylla]"``` 
   * ```-e "stopped=true"``` - start server is stopped state
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "cluster_nodes=2"``` - number of nodes to add (default is 2)
@@ -205,11 +206,6 @@ The next stress test will restart the Cassandra service.
 ```
 ./ec2-terminate.sh
 ```
-
-## Todo
-Scylla cluster does not yet support:
-* ec2-add-node-to-cluster, ec2-start-server.sh and ec2-stop-server.sh
-
 
 ## License
 The Scylla/Cassandra Cluster Stress is distributed under the Apache License.

@@ -4,7 +4,6 @@
   tasks:
     - name: Gather facts
       action: ec2_facts
-
     - name: wait for scylla service to complete its init procedures
       wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042 timeout=600
 
@@ -12,7 +11,7 @@
   hosts: NewDB
   user: "{{scylla_login}}"
   roles:
-    - { role: scylla-config, sudo: yes, when: ec2_multiregion|bool or not use_db_ami|bool}
+    - { role: scylla-config, sudo: yes, when: ec2_multiregion|bool or add_node|bool or not use_db_ami|bool}
     - { role: scylla-collectd-client, sudo: yes, when: collectd_server is defined }
 
 - name: Run scylla nodes
@@ -20,4 +19,4 @@
   user: "{{scylla_login}}"
   tasks:
     - include: roles/scylla-config/tasks/start.yaml
-      when: not stopped|bool and (ec2_multiregion|bool or collectd_server is defined)
+      when: not stopped|bool and (ec2_multiregion|bool or add_node|bool or collectd_server is defined)

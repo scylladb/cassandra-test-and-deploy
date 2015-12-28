@@ -1,7 +1,12 @@
 ---
-- name: Stop Service
+- name: Stop Cassandra Service
   hosts: "DB:&Cassandra"
   user: "{{cassandra_login}}"
   tasks:
     - { include: roles/cassandra-config/tasks/stop.yaml }
 
+- name: Stop Scylla Service
+  hosts: "DB:&Scylla"
+  user: "{{scylla_login}}"
+  tasks:
+    - { include: roles/scylla-config/tasks/stop.yaml }

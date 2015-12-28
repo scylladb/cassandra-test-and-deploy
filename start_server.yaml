@@ -1,7 +1,14 @@
 ---
-- name: Start Service
+- name: Start Cassandra Servers
   hosts: "DB:&Cassandra:&Stopped"
   user: "{{cassandra_login}}"
   serial: 1
   tasks:
     - { include: roles/cassandra-config/tasks/start.yaml }
+
+- name: Start Scylla Servers
+  hosts: "DB:&Scylla:&Stopped"
+  user: "{{scylla_login}}"
+  serial: 1
+  tasks:
+    - { include: roles/scylla-config/tasks/start.yaml }
