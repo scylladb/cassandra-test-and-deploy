@@ -5,10 +5,13 @@
 # stop the service and clean data with wrong config file
 - include: clean.yaml
 
+- set_fact:
+    user_group: "tag_user_{{setup_name}}"
+
 # use exisiting nodes as seed, even if they are not
 # TBD find public IP in case of multi region
 - command: echo "{{ hostvars[item].ec2_private_ip_address }}"
-  with_items: groups.Scylla
+  with_items: groups.Scylla | intersect (groups.{{user_group}})
   register: output
   changed_when: no
   when: add_node
