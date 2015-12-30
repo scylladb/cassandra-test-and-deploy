@@ -11,7 +11,7 @@
 # use exisiting nodes as seed, even if they are not
 # TBD find public IP in case of multi region
 - command: echo "{{ hostvars[item].ec2_private_ip_address }}"
-  with_items: groups.Scylla | intersect (groups.{{user_group}})
+  with_items: groups.Scylla
   register: output
   changed_when: no
   when: add_node
