@@ -4,7 +4,7 @@ regions:
   us-west-2 :
     region_name: us-west-2
     cassandra_ami: ami-1cff962c # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-4ebaa12f  # scylla 0.15
+    scylla_ami: ami-5e60853e  # scylla 0.16
     ubuntu_image: ami-3f68640f # ubuntu 14.04
     fedora_ami: ami-05f4ed35 # fedora 22
     key_name: tzach-oregon
@@ -13,7 +13,7 @@ regions:
   us-east-1:
     region_name: us-east-1
     cassandra_ami: ami-ada2b6c4 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-45c69e2f  # scylla 0.15
+    scylla_ami: ami-ac4f69c6  # scylla 0.16
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     fedora_ami: ami-a51564c0 # fedora 22
     key_name: tzach-virginia
@@ -22,7 +22,7 @@ regions:
   us-west-1:
     region_name: us-west-1
     cassandra_ami: ami-3cf7c979 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-3880f558 # scylla 0.15
+    scylla_ami: ami-10bbcf70 # scylla 0.16
     fedora_ami: ami-c9e21e8d # fedora 22
     key_name: tzach-california
     security_group: cassandra-security-group # make sure security group is corralte to vpc
@@ -38,7 +38,7 @@ ec2_multiregion: false
 use_regions: "{%if ec2_multiregion | bool %}{{regions}}{%else%}{{region_to_use_data}}{%endif%}"
 
 cassandra_login: ubuntu
-scylla_login: fedora
+scylla_login: centos
 loader_login: fedora
 
 instance_type: c3.2xlarge

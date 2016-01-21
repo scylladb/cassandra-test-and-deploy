@@ -3,17 +3,23 @@
 
 - set_fact: node="scylla-{{ansible_hostname }}"
 
-- name: set collectd server
+- name: set collectd server when SCYLLA_ARGS already have parameters
   replace: dest=/etc/sysconfig/scylla-server
            backup=yes
            regexp='SCYLLA_ARGS="(.*)"'
            replace='SCYLLA_ARGS="\1 --collectd-address={{collectd_server}}:{{collectd_server_port}} --collectd=1 --collectd-hostname={{node}} --collectd-poll-period 3000"'
 
+- name: set collectd server set collectd server when SCYLLA_ARGS is empty
+  replace: dest=/etc/sysconfig/scylla-server
+           backup=yes
+           regexp="SCYLLA_ARGS=$"
+           replace='SCYLLA_ARGS="--collectd-address={{collectd_server}}:{{collectd_server_port}} --collectd=1 --collectd-hostname={{node}} --collectd-poll-period 3000"'
+
 - name: install collectd client
-  dnf: name=collectd state=latest
+  yum: name=collectd state=latest
 
 - name: install collectd-netlink plugin
-  dnf: name=collectd-netlink state=latest
+  yum: name=collectd-netlink state=latest
 
 - action: template src=collectd-client.conf dest=/etc/collectd.conf owner=root group=root
   notify:
