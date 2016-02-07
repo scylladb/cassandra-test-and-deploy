@@ -5,9 +5,6 @@
 # stop the service and clean data with wrong config file
 - include: clean.yaml
 
-- set_fact:
-    user_group: "tag_user_{{setup_name}}"
-
 # use exisiting nodes as seed, even if they are not
 # TBD find public IP in case of multi region
 - command: echo "{{ hostvars[item].ec2_private_ip_address }}"
@@ -17,9 +14,6 @@
   when: add_node
 
 - set_fact: seeds="{{ output.results|map(attribute='stdout')| first }}"
-  when: add_node
-
-- debug: msg="seeds {{seeds}}"
   when: add_node
 
 - set_fact: seeds="{{ groups.SeedsIp | join(',') }}"
@@ -34,13 +28,27 @@
 - set_fact: broadcast_address="{{ansible_ec2_public_ipv4}}"
   when: ec2_multiregion|bool
 
+- debug: msg="seeds {{seeds}}"
 
-- action: template src=scylla.yaml dest=/etc/scylla/scylla.yaml mode="u=rw,g=r,o=r"
-- action: template src=cassandra-rackdc.properties dest=/etc/scylla/cassandra-rackdc.properties mode="u=rw,g=r,o=r"
+- name: update broadcast_address
+  lineinfile: "dest=/etc/scylla/scylla.yaml backup=yes state=present regexp='^broadcast_address:' line='broadcast_address: {{broadcast_address}}'"
   when: ec2_multiregion|bool
 
-- name: set api-address to localhost
-  replace: dest=/etc/sysconfig/scylla-server
-           backup=yes
-           regexp='SCYLLA_ARGS="(.*)"'
-           replace='SCYLLA_ARGS="\1 --api-address 127.0.0.1"'
+- name: update rpc_address
+  lineinfile: "dest=/etc/scylla/scylla.yaml backup=yes state=present regexp='^rpc_address:' line='rpc_address: {{internal_ip}}'"
+  when: ec2_multiregion|bool
+
+- name: update broadcast_rpc_address
+  lineinfile: "dest=/etc/scylla/scylla.yaml backup=yes state=present regexp='broadcast_rpc_address:' line='# broadcast_rpc_address:'"
+  when: ec2_multiregion|bool
+
+- name: update snitch
+  lineinfile: "dest=/etc/scylla/scylla.yaml backup=yes state=present regexp='^endpoint_snitch:' line='endpoint_snitch: {{snitch}}'"
+  when: ec2_multiregion|bool
+
+- name: update seeds
+  lineinfile: "dest=/etc/scylla/scylla.yaml backup=yes state=present regexp='- seeds:' line='          - seeds: \"{{seeds}}\"  '"
+
+- name: update auto_bootstrap
+  lineinfile: "dest=/etc/scylla/scylla.yaml backup=yes state=present regexp='^auto_bootstrap:' line='auto_bootstrap: {{auto_bootstrap}}'"
+  when: add_node
