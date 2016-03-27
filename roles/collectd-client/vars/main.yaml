@@ -12,3 +12,4 @@ daemon_opts: "-P /var/run/collectd.pid -C /etc/collectd/collectd.conf"
 service_name: collectd
 pidfile_opts:
 
+collectd_node_name: "{{ansible_hostname}}"
