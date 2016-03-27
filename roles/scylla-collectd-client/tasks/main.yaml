@@ -1,8 +1,6 @@
 - name: Gather facts
   action: ec2_facts
 
-- set_fact: node="scylla-{{ansible_hostname }}"
-
 - name: install collectd client
   yum: name=collectd state=latest
 
