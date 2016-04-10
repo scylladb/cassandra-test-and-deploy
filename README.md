@@ -44,7 +44,13 @@ eval `ssh-agent -s`
 ```
 
 * By default, `~/.ssh/id_rsa.pub` will be used as your EC2 key. if you
-  do not have such a key, [generate one](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/). to use a different key, override this with ```-e "public_key_path=your-path.pub"```
+  do not have such a key, [generate one](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) with `ssh-keygen -y`. to use a different key, override this with ```-e "public_key_path=your-path.pub"```
+
+make sure permission are correct:
+```
+chmod 700 ~/.ssh
+chmod 700 ~/.ssh/id_rsa.pub
+```
 
 * Add it to your agent
 ```sh
