@@ -8,8 +8,6 @@
 
   tasks:
 
-    - debug: msg="{{material}}"
-
     - name: Create an EC2 key
       ec2_key:
         name: "{{setup_name}}-test-and-deploy-key"
