@@ -1,0 +1,19 @@
+---
+- name: Provision Scylla cluster nodes on EC2
+  hosts: localhost
+  connection: local
+
+  vars:
+    material: "{{ lookup('file', public_key_path) }}"
+
+  tasks:
+
+    - debug: msg="{{material}}"
+
+    - name: Create an EC2 key
+      ec2_key:
+        name: "{{setup_name}}-test-and-deploy-key"
+        region:  "{{item.value.region_name}}"
+        key_material: "{{ material }}"
+        state: present
+      with_dict: use_regions

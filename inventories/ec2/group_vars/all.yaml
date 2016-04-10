@@ -7,7 +7,6 @@ regions:
     scylla_ami: ami-7251bb12  # Scylla 1.0
     ubuntu_image: ami-3f68640f # ubuntu 14.04
     fedora_ami: ami-05f4ed35 # fedora 22
-    key_name: tzach-oregon
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-5207ee37
   us-east-1:
@@ -16,7 +15,6 @@ regions:
     scylla_ami: ami-5152583b  # Scylla 1.0
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     fedora_ami: ami-a51564c0 # fedora 22
-    key_name: tzach-virginia
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-ec4a72c4
   us-west-1:
@@ -24,7 +22,6 @@ regions:
     cassandra_ami: ami-3cf7c979 # DataStax Auto-Clustering AMI 2.5.1-hvm
     scylla_ami: ami-3ce4995c # Scylla 1.0
     fedora_ami: ami-c9e21e8d # fedora 22
-    key_name: tzach-california
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-10a04c75
 
@@ -44,3 +41,5 @@ loader_login: fedora
 instance_type: c3.xlarge
 
 setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"
+
+

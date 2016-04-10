@@ -37,3 +37,6 @@ use_db_ami: true
 use_reflector: true
 
 dc_suffix: _test
+
+# path to public key
+public_key_path: "~/.ssh/id_rsa.pub"
