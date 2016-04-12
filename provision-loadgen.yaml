@@ -9,7 +9,7 @@
       local_action:
         module: ec2
         region: "{{item.value.region_name}}"
-        keypair: "{{item.value.key_name}}"
+        keypair: "{{setup_name}}-test-and-deploy-key"
         group: "{{item.value.security_group}}"
         vpc_subnet_id: "{{item.value.vpc_subnet_id}}"
         assign_public_ip: yes

@@ -1,3 +1,4 @@
 ---
+- include: create-keys.yaml
 - include: provision-db.yaml db=scylla db_version=community
 - include: prepare-scylla.yaml

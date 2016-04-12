@@ -32,25 +32,32 @@ export AWS_ACCESS_KEY_ID=<...>
 export AWS_SECRET_ACCESS_KEY=<...>
 ```
 
+* Make sure your server use a unique name on EC2, by setting ANSIBLE_EC2_PREFIX
+```
+export ANSIBLE_EC2_PREFIX=tzach
+```
+
 * Make sure you have a ssh-agent running:
 
 ```
 eval `ssh-agent -s`
 ```
 
-* Make sure your EC2 SSH keys for each EC2 region is included in the keychain:
+* By default, `~/.ssh/id_rsa.pub` will be used as your EC2 key. if you
+  do not have such a key, [generate one](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) with `ssh-keygen`. to use a different key, override this with ```-e "public_key_path=your-path.pub"```
 
+make sure permission are correct:
+```
+chmod 700 ~/.ssh
+chmod 700 ~/.ssh/id_rsa.pub
+```
+
+* Add it to your agent
 ```sh
-ssh-add <key-file>
+ssh-add ~/.ssh/id_rsa.pub
 ```
+(use your key)
 
-key-file should have the right permission
-
-```
-chmod 200 key-file
-```
-
-**You should do it for each of EC2 region!**
 
 * Avoid prompting for SSH key confirmation by
 ```
@@ -65,14 +72,9 @@ Update boto if required
 sudo pip install --upgrade boto
 ```
 
-* Make sure your server use a unique name on EC2, by setting ANSIBLE_EC2_PREFIX
-```
-export ANSIBLE_EC2_PREFIX=tzach
-```
-
 * The default EC2 regions are define in
-```inventories/ec2/group_vars/all.yaml```, with the *AMI*, *security group*, and *key-name* per region.
-**You must update the key_name, security_group and vpc_subnet_id** to your own.
+```inventories/ec2/group_vars/all.yaml```, with the *AMI*, *security group*.
+**You must update the security_group and vpc_subnet_id** to your own.
 
 #### Create security group
 **Do this only if you do not already have a security group you can use**
