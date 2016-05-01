@@ -98,6 +98,7 @@ Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
   * ```-e "instance_type=c3.8xlarge"``` - type of EC2 instance
   * ```-e "ec2_multiregion=true"```- a multi region EC2 deployment
   * ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
+  * ```-e "prometheus_client=true"``` - install and run a **Prometheus** client, [collectd_exporter](https://github.com/prometheus/collectd_exporter) on each server, exposing a metrics in port 9103
 
 Server are created with EC2 name *DB*, and tag "server=Scylla"
 

@@ -1,2 +1,0 @@
-- name: restart collectd
-  action: service name=collectd enabled=yes pattern=collectd state=restarted
