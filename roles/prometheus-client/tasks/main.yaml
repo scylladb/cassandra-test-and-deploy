@@ -1,0 +1,19 @@
+---
+- yum: name={{ item }} state=present update_cache=yes
+  with_items:
+    - git
+
+- git: repo=https://github.com/prometheus/collectd_exporter dest=/home/centos/collectd_exporter
+
+- name: Running make for collectd_exporter
+  command: make chdir='/home/centos/collectd_exporter'
+
+- command: /home/centos/collectd_exporter/collectd_exporter -collectd.listen-address=":65534"
+  async: 604800
+  poll: 0
+
+- name: upload scylla collectd config
+  template: src=scylla.conf dest=/etc/collectd.d/scylla.conf owner=root group=root
+
+- name: restart collectd service
+  service: name=collectd state=restarted
