@@ -2,6 +2,7 @@
   hosts: NewDB
   user: "{{scylla_login}}"
   tasks:
+    - debug: msg="prometheus_client {{prometheus_client}}"
     - name: wait for scylla service to complete its init procedures
       wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042 timeout=600
 
@@ -11,6 +12,7 @@
   roles:
     - { role: scylla-config, sudo: yes, when: ec2_multiregion|bool or add_node|bool or not use_db_ami|bool}
     - { role: scylla-collectd-client, sudo: yes, when: collectd_server is defined }
+    - { role: prometheus-client, sudo: yes, when: prometheus_client|bool }
 
 - name: Run scylla nodes
   hosts: NewDB
