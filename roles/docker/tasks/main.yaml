@@ -1,0 +1,25 @@
+---
+-   name: Install python setup tools
+    yum: name=python-setuptools
+
+-   name: Install Pypi
+    easy_install: name=pip
+
+- name: install yum repo
+  copy:
+    owner=root
+    src=docker.repo
+    dest=/etc/yum.repos.d/docker.repo
+
+- name: Install docker
+  yum: name={{ item }} state=latest
+  with_items:
+    - docker-engine
+    - python-docker-py
+
+- name: making sure pip installed
+  yum: name=python-pip state=present
+
+-   name: Make sure Docker is running
+    service: name=docker state=running
+    tags: docker
