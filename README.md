@@ -35,6 +35,7 @@ export AWS_SECRET_ACCESS_KEY=<...>
 * Make sure your server use a unique name on EC2, by setting ANSIBLE_EC2_PREFIX
 ```
 export ANSIBLE_EC2_PREFIX=tzach
+export ANSIBLE_TIMEOUT=30
 ```
 
 * Make sure you have a ssh-agent running:
