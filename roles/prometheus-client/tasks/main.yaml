@@ -1,14 +1,11 @@
 ---
-- yum: name={{ item }} state=present update_cache=yes
-  with_items:
-    - git
+- name: download collectd_exporter.tar.gz
+  get_url: url=https://github.com/prometheus/collectd_exporter/releases/download/{{collectd_exporter_ver}}/collectd_exporter-{{collectd_exporter_ver}}.linux-amd64.tar.gz dest={{install_dir}}/collectd_exporter.tar.gz
 
-- git: repo=https://github.com/prometheus/collectd_exporter dest=/home/centos/collectd_exporter
+- name: extract collectd_exporter.tar.gz
+  unarchive: src={{install_dir}}/collectd_exporter.tar.gz dest={{install_dir}}/ copy=no
 
-- name: Running make for collectd_exporter
-  command: make chdir='/home/centos/collectd_exporter'
-
-- command: /home/centos/collectd_exporter/collectd_exporter -collectd.listen-address=":65534"
+- command: '{{install_dir}}/collectd_exporter -collectd.listen-address="0.0.0.0:65534"'
   async: 604800
   poll: 0
 
