@@ -9,6 +9,16 @@
     iteration: 0 # overload me
     server: "Scylla"
   tasks:
+    - set_fact: index={{ec2_tag_index}}
+    - set_fact: range_start={{1 + (seq_populate|int) * (index|int) }}
+      when: seq_populate is defined
+    - set_fact: range_end={{(seq_populate|int) * (1 + (index|int)) }}
+      when: seq_populate is defined
+    - set_fact: range="{{range_start}}..{{range_end}}"
+      when: seq_populate is defined
+    - debug: msg="client key range {{range}}"
+      when: seq_populate is defined
+
     - set_fact: loader_ip="{{ansible_eth0.ipv4.address}}"
 
     - name: Gather facts
@@ -51,11 +61,17 @@
       when: profile_file is undefined
       run_once: true
 
-    - shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} no-warmup {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
-      when: profile_file is undefined
+    - name: run stress for seq populate
+      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress write no-warmup {{command_options}} -pop seq={{range}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
+      when: profile_file is undefined and seq_populate is defined
+
+    - name: run stress
+      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} no-warmup {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
+      when: profile_file is undefined and seq_populate is undefined
       ignore_errors: True
 
-    - shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress user profile={{profile_file}} no-warmup {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
+    - name: run stress with profile
+      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress user profile={{profile_file}} no-warmup {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
       when: profile_file is defined
       ignore_errors: True
 
