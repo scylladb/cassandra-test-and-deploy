@@ -176,6 +176,7 @@ notation. Examples below:
 * ```-e "threads=200"```
 * ```-e "profile_dir=/tmp/cassandra-stress-profiles/" -e "profile_file=cust_a/users/users1.yaml" -e "command_options=ops\\(insert=1\\)"```
 * ```-e "clean_data=true"``` - clean all data from DB servers and restart them before starting the stress
+* ```-e "seq_populate=100"``` - populate different range per loader, using `-pop seq=1..100`,  `-pop seq=101..200` etc
 
 Make sure **load name is unique**  so the new results will not
 override an old run in the same day.
