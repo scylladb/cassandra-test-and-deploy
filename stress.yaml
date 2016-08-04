@@ -9,7 +9,10 @@
     iteration: 0 # overload me
     server: "Scylla"
   tasks:
-    - set_fact: index={{ec2_tag_index}}
+    - name: Gather facts
+      action: ec2_facts
+
+    - set_fact: index={{ansible_ec2_ami_launch_index}}
     - set_fact: range_start={{1 + (seq_populate|int) * (index|int) }}
       when: seq_populate is defined
     - set_fact: range_end={{(seq_populate|int) * (1 + (index|int)) }}
@@ -21,15 +24,12 @@
 
     - set_fact: loader_ip="{{ansible_eth0.ipv4.address}}"
 
-    - name: Gather facts
-      action: ec2_facts
 
     - set_fact:
-        region_group: "{{ ec2_region | regex_replace('-','_') }}"
         user_group: "tag_user_{{setup_name}}"
 
     - debug: msg="{{ hostvars[item].ec2_private_ip_address }}"
-      with_items: groups.DB | intersect (groups.{{region_group}}) | intersect (groups.{{user_group}}) | intersect (groups.{{server}}) | difference(groups.Stopped)
+      with_items: groups.DB | intersect (groups[ec2_region]) | intersect (groups[user_group]) | intersect (groups[server]) | difference(groups.Stopped)
       register: output
 
     - set_fact: ip_list={{ output.results|map(attribute='msg') | join(',') }}
