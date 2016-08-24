@@ -14,7 +14,7 @@
         vpc_subnet_id: "{{item.value.vpc_subnet_id}}"
         assign_public_ip: yes
         instance_type: "{{instance_type}}"
-        image: "{{item.value.fedora_ami}}"
+        image: "{{item.value.loader_ami}}"
         count: "{{ load_nodes}}"
         instance_tags:
           Name: "CassandraLoadgen"

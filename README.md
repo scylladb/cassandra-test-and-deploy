@@ -16,6 +16,10 @@ The following will compare Scylla cluster to Cassandra cluster performance on EC
 ```
 Note you will need more load nodes to stress Scylla.
 
+### Which Scylla version is running?
+* Scylla AMI is used for Scylla DB servers. You can find, and change, Scylla AMI per region in `inventories/ec2/group_vars/all.yaml`
+* scylla-tools package is used for cassandra-stress install on loader servers. You can find the repo version in `roles/loader/vars/main.yaml`
+
 ### Prerequisites
 
 #### install

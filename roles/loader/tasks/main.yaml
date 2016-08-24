@@ -1,8 +1,18 @@
 ---
-- name: Update repo
-  action: template src=scylla.repo dest=/etc/yum.repos.d/scylla.repo owner=root group=root
+
+- debug: msg="installing scylla packages rel {{scylla_tools_version}}"
+
+- name: Install prerequisites
+  yum: name={{ item }}
+  sudo: yes
+  with_items:
+     - wget
+     - epel-release
+
+- name: update repo
+  get_url: url=http://downloads.scylladb.com/rpm/centos/scylla-{{scylla_tools_version}}.repo dest=/etc/yum.repos.d/scylla.repo owner=root group=root
   sudo: yes
 
-- name: Install Scylla tools
-  dnf: name=scylla-tools
+- name: Install Scylla
+  yum: name=scylla-tools
   sudo: yes
