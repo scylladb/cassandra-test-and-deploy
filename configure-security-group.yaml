@@ -95,6 +95,15 @@
             from_port: -1
             to_port: -1
             cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 9100
+            to_port: 9100
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 9180
+            to_port: 9180
+            cidr_ip: 0.0.0.0/0
+
 
         rules_egress:
           - proto: all
