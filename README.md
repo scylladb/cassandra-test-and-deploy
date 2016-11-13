@@ -1,4 +1,4 @@
-# Ansible Scylla and Cassandra Cluster Stress 
+# Ansible Scylla and Cassandra Cluster Stress
 
 A framework for running and automating Scylla/Cassandra stress tests on Amazon EC2.
 
@@ -15,6 +15,8 @@ The following will compare Scylla cluster to Cassandra cluster performance on EC
 ./ec2-stress.sh 1 -e "load_name=scylla.v1" -e "server=Scylla" -e "stress_options='-errors ignore'"
 ```
 Note you will need more load nodes to stress Scylla.
+
+Starting from Scylla 1.4, Scylla expose by default Prometheus metrics. More on [monitoring Scylla](https://github.com/scylladb/scylla-grafana-monitoring)
 
 ### Which Scylla version is running?
 * Scylla AMI is used for Scylla DB servers. You can find, and change, Scylla AMI per region in `inventories/ec2/group_vars/all.yaml`
@@ -102,8 +104,6 @@ Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
   * ```-e "cluster_nodes=2"``` - number of nodes **per region** (default 2)
   * ```-e "instance_type=c3.8xlarge"``` - type of EC2 instance
   * ```-e "ec2_multiregion=true"```- a multi region EC2 deployment
-  * ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
-  * ```-e "prometheus_client=true"``` - install and run a **Prometheus** client, [collectd_exporter](https://github.com/prometheus/collectd_exporter) on each server, exposing a metrics in port 9103
 
 Server are created with EC2 name *DB*, and tag "server=Scylla"
 
@@ -119,7 +119,6 @@ Cassandra servers launch from AMI, base on Ubuntu 14 (login ubuntu)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "num_tokens=6"``` - set number of vnode per server
   * ```-e ec2_multiregion=true``` - a multi region EC2 deployment
-  ```-e "collectd_server=your-collectd-server-ip"``` - collectd server to collect metric. See [scylla-monitoring](https://github.com/scylladb/scylla-monitoring) for an example monitoring server
 
 Server are created with EC2 name *DB*, and tag "server=Cassandra"
 

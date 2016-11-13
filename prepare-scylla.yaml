@@ -10,12 +10,10 @@
   user: "{{scylla_login}}"
   roles:
     - { role: scylla-config, sudo: yes, when: ec2_multiregion|bool or add_node|bool or not use_db_ami|bool}
-    - { role: scylla-collectd-client, sudo: yes, when: collectd_server is defined }
-    - { role: prometheus-client, sudo: yes, when: prometheus_client is defined }
 
 - name: Run scylla nodes
   hosts: NewDB
   user: "{{scylla_login}}"
   tasks:
     - include: roles/scylla-config/tasks/start.yaml
-      when: not stopped|bool and (ec2_multiregion|bool or add_node|bool or collectd_server is defined)
+      when: not stopped|bool and (ec2_multiregion|bool or add_node|bool)
