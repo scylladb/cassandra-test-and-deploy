@@ -1,0 +1,5 @@
+version: '0.11.0'
+download_path: 'https://github.com/brianfrankcooper/YCSB/releases/download/{{version}}/ycsb-{{version}}.tar.gz'
+destination: '/home/centos'
+ycsb_path: '{{ destination }}/ycsb-{{ version }}.tar.gz'
+

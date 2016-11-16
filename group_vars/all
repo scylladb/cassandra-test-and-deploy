@@ -23,6 +23,8 @@ threads: 250
 clean_data: false
 profile_dir: /tmp/cassandra-stress-profiles/
 
+ycsb: false
+
 #others
 s3_buckt: cassandra.test
 upload_to_s3: false

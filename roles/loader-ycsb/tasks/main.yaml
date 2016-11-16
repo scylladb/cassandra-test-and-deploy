@@ -1,0 +1,14 @@
+---
+- debug: msg="installing YCSB"
+
+- name: download YCSB source code
+  get_url: url={{ download_path }}
+           dest={{ ycsb_path }}
+  args:
+    validate_certs: False
+
+- name: unarchive YCSB
+  unarchive: src={{ ycsb_path }} dest={{ destination }}/ copy=no
+
+- name: rename ycsb.x to ycsb
+  command: mv {{ destination }}/ycsb-{{version}} {{ destination }}/ycsb
