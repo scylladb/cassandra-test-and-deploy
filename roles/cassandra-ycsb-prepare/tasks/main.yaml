@@ -1,0 +1,10 @@
+---
+
+- name: upload cql file
+  action: template src=create_table.cql dest=~/create_table.cql
+  run_once: true
+
+- name: run CQL file
+  shell: cqlsh < ~/create_table.cql
+  run_once: true
+

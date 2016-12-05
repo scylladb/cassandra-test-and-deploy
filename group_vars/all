@@ -23,6 +23,7 @@ threads: 250
 clean_data: false
 profile_dir: /tmp/cassandra-stress-profiles/
 
+# YCSB
 ycsb: false
 
 #others

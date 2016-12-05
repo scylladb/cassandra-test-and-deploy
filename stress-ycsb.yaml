@@ -1,0 +1,83 @@
+---
+- include: clean_data.yaml
+
+- name: YCSB Prepare
+  hosts: "Scylla:!Stopped"
+  user: "{{scylla_login}}"
+  roles:
+    - { role: cassandra-ycsb-prepare }
+
+- name: YCSB Prepare
+  hosts: "Cassandra:!Stopped"
+  user: "{{cassandra_login}}"
+  roles:
+    - { role: cassandra-ycsb-prepare }
+
+- name: Run stress
+  hosts: "CassandraLoadgen"
+  user: "{{loader_login}}"
+  vars:
+    iteration: 0 # overload me
+    server: "Scylla"
+
+  tasks:
+
+    - name: Gather facts
+      action: ec2_facts
+
+    - set_fact: index={{ansible_ec2_ami_launch_index}}
+    - set_fact: range_start={{1 + (seq_populate|int) * (index|int) }}
+      when: seq_populate is defined
+    - set_fact: range_end={{(seq_populate|int) * (1 + (index|int)) }}
+      when: seq_populate is defined
+    - set_fact: range="{{range_start}}..{{range_end}}"
+      when: seq_populate is defined
+    - debug: msg="client key range {{range}}"
+      when: seq_populate is defined
+
+    - set_fact: loader_ip="{{ansible_eth0.ipv4.address}}"
+
+
+    - set_fact:
+        user_group: "tag_user_{{setup_name}}"
+
+    - debug: msg="{{ hostvars[item].ec2_private_ip_address }}"
+      with_items: groups.DB | intersect (groups[ec2_region]) | intersect (groups[user_group]) | intersect (groups[server]) | difference(groups.Stopped)
+      register: output
+
+    - set_fact: ip_list={{ output.results|map(attribute='msg') | join(',') }}
+
+    - debug: msg="ip_list is {{ip_list}}"
+
+    - set_fact: taskset="taskset -c {{load_cpus}}"
+      when: load_cpus is defined
+
+    - set_fact: taskset=""
+      when: load_cpus is not defined
+
+    - debug: msg="setting network IRQ affinity to CPU0"
+      when: load_cpus is defined
+
+    - shell: for irq in `cat  /proc/interrupts | grep eth0 | cut -d":" -f1`; do echo 1 > /proc/irq/$irq/smp_affinity; done
+      when: load_cpus is defined
+      sudo: yes
+
+    - name: kill java, if already running
+      shell: pkill java
+      sudo: yes
+      ignore_errors: True
+
+    - set_fact: log_file="{{remote_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}"
+
+    - name: YCSB prepere
+      shell: ~/ycsb/bin/ycsb load cassandra2-cql -P ~/ycsb/workloads/workloada -p hosts={{ip_list}}
+      run_once: true
+
+    - name: YCSB run
+      shell: ~/ycsb/bin/ycsb run cassandra2-cql -P ~/ycsb/workloads/workloada -p hosts={{ip_list}} > {{log_file}}.{{iteration}}.data
+
+    - fetch: src={{log_file}}.{{iteration}}.data dest={{home_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}.{{iteration}}.data flat=yes
+      ignore_errors: True
+
+    - local_action: s3 bucket={{s3_buckt}} object={{output_file}}/{{output_file}}.{{ec2_region}}.{{loader_ip}}.{{iteration}} src={{home_path}}{{output_file}}.{{loader_ip}}.{{iteration}} mode=put
+      when: upload_to_s3
