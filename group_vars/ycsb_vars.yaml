@@ -1,0 +1,15 @@
+---
+prepare: true
+workload: workloada
+command_options:
+output_format: ycsb.{{workload}}.{{load_name}}.{{ansible_date_time.date}}
+output_file: "{{output_format}}"
+remote_path: /home/{{loader_login}}/
+home_path: /tmp/cassandra-results/
+stress_options:
+sleep_between_runs: 60
+threads: 100
+clean_data: false
+profile_dir: /tmp/cassandra-stress-profiles/
+prepere_options:
+run_options:

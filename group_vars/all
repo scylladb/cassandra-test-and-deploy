@@ -8,20 +8,12 @@ cluster_name: CassandraCluster
 
 cassandra_ver: 2.1.8
 
-# load
-load_name: run
-command: write
-command_options:
-output_format: cassandra-stress.{{command}}.{{load_name}}.{{ansible_date_time.date}}
-output_file: "{{output_format}}"
+## load options
+clean_data: false
+sleep_between_runs: 60
 remote_path: /home/{{loader_login}}/
 home_path: /tmp/cassandra-results/
-stress_options:
-populate: 1000000
-sleep_between_runs: 60
-threads: 250
-clean_data: false
-profile_dir: /tmp/cassandra-stress-profiles/
+load_name: run
 
 # YCSB
 ycsb: false
