@@ -132,13 +132,15 @@ Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including 
   **options**
   * ```-e "load_nodes=2"``` - number of loaders **per region** (default 2)
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
+  * ```-e "ycsb=true"``` - YCSB loader
+
 
 #### Add nodes to existing cluster
 ```
 ./ec2-add-node-to-cluster.sh -e "server=Cassandra"
 ```
   **options**
-  * ```-e "server=[Cassandra|Scylla]"``` 
+  * ```-e "server=[Cassandra|Scylla]"```
   * ```-e "stopped=true"``` - start server is stopped state
   * ```-e "instance_type=m3.large"``` - type of EC2 instance
   * ```-e "cluster_nodes=2"``` - number of nodes to add (default is 2)
@@ -151,7 +153,7 @@ Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including 
 ./ec2-start-server.sh
 ```
 
-### Run Load
+### Run Cassandra Stress Load
 
 ```
 ./ec2-stress.sh <iterations> -e "load_name=late_night" -e "server=Scylla" <more options>
@@ -185,6 +187,22 @@ Make sure **load name is unique**  so the new results will not
 override an old run in the same day.
 
 Load name can not not include *-* (dash)
+
+### Run YCSB Load
+
+(make to sure to create YCSB loaders in advance)
+
+```
+./ec2-stress-ycsb.sh <iterations> -e "load_name=late_night" -e "server=Scylla" <more options>
+```
+
+To override each of the parameter, use the ``-e "param=value"
+notation. Examples below:
+* ```-e "workload=workloada"``` Choose YCSB workload
+* ```-e "ycsb-prepare=false"``` do *not* run YCSB prepare phase (defualt is true)
+* ```-e "recordcount=30000"``` YCSB prepare recoreds count
+* ```-e "prepere_options='-p recordcount=100000'"```
+* ```-e "run_options='-p operationcount=1000000 -p cassandra.writeconsistencylevel=QUORUM -p cassandcra.readconsistencylevel=QUORUM'"```
 
 ### Results
 
