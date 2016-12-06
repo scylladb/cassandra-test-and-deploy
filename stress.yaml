@@ -2,6 +2,7 @@
 - include: clean_data.yaml
 - include: stress_profile.yaml
 
+
 - name: Run stress
   hosts: "CassandraLoadgen"
   user: "{{loader_login}}"
@@ -9,6 +10,8 @@
     iteration: 0 # overload me
     server: "Scylla"
   tasks:
+    - include_vars: group_vars/cassandra_stress_vars.yaml
+
     - name: Gather facts
       action: ec2_facts
 

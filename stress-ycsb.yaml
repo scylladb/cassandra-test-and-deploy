@@ -22,6 +22,8 @@
 
   tasks:
 
+    - include_vars: group_vars/ycsb_vars.yaml
+
     - name: Gather facts
       action: ec2_facts
 
@@ -70,11 +72,12 @@
     - set_fact: log_file="{{remote_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}"
 
     - name: YCSB prepere
-      shell: ~/ycsb/bin/ycsb load cassandra2-cql -P ~/ycsb/workloads/workloada -p hosts={{ip_list}}
+      shell: ~/ycsb/bin/ycsb load cassandra2-cql -P ~/ycsb/workloads/{{workload}} -p hosts={{ip_list}} {{prepere_options}}
+      when: prepare
       run_once: true
 
     - name: YCSB run
-      shell: ~/ycsb/bin/ycsb run cassandra2-cql -P ~/ycsb/workloads/workloada -p hosts={{ip_list}} > {{log_file}}.{{iteration}}.data
+      shell: ~/ycsb/bin/ycsb run cassandra2-cql -P ~/ycsb/workloads/{{workload}} -s -threads {{threads}} -p hosts={{ip_list}} {{run_options}} > {{log_file}}.{{iteration}}.data
 
     - fetch: src={{log_file}}.{{iteration}}.data dest={{home_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}.{{iteration}}.data flat=yes
       ignore_errors: True
