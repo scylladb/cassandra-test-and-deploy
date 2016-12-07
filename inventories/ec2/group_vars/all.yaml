@@ -12,7 +12,7 @@ regions:
   us-east-1:
     region_name: us-east-1
     cassandra_ami: ami-ada2b6c4 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-38c2f22f  # Scylla 1.5 rc1
+    scylla_ami: ami-79d3f06e  # Scylla 1.4.1
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     loader_ami: ami-6d1c2007 # centos 7.2
     security_group: cassandra-security-group # make sure security group is corralte to vpc
@@ -26,7 +26,7 @@ regions:
     vpc_subnet_id: subnet-10a04c75
 
 # subset of the region use when ec2_multiregion is false
-region_to_use: "us-east-1"
+region_to_use: "us-west-2"
 region_to_use_data:
   region_to_use: "{{regions[region_to_use]}}"
 
