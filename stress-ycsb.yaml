@@ -78,6 +78,11 @@
 
     - name: YCSB run
       shell: ~/ycsb/bin/ycsb run cassandra2-cql -P ~/ycsb/workloads/{{workload}} -s -threads {{threads}} -p hosts={{ip_list}} {{run_options}} > {{log_file}}.{{iteration}}.data
+      when: seq_populate is undefined
+
+    - name: YCSB run
+      shell: ~/ycsb/bin/ycsb run cassandra2-cql -P ~/ycsb/workloads/{{workload}} -s -threads {{threads}} -p hosts={{ip_list}} -p insertstart={{range_start}} -p insertcount={{seq_populate}} {{run_options}} > {{log_file}}.{{iteration}}.data
+      when: seq_populate is defined
 
     - fetch: src={{log_file}}.{{iteration}}.data dest={{home_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}.{{iteration}}.data flat=yes
       ignore_errors: True

@@ -202,6 +202,7 @@ notation. Examples below:
 * ```-e "ycsb-prepare=false"``` do *not* run YCSB prepare phase (defualt is true)
 * ```-e "recordcount=30000"``` YCSB prepare recoreds count
 * ```-e "prepere_options='-p recordcount=100000'"```
+* ```-e "seq_populate=100"``` - populate different range per loader, using `-pop seq=1..100`,  `-pop seq=101..200` etc
 * ```-e "run_options='-p operationcount=1000000 -p cassandra.writeconsistencylevel=QUORUM -p cassandcra.readconsistencylevel=QUORUM'"```
 
 ### Results
