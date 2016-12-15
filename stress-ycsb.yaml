@@ -1,7 +1,17 @@
 ---
 - include: clean_data.yaml
-- include: stress_profile.yaml
 
+- name: YCSB Prepare
+  hosts: "Scylla:!Stopped"
+  user: "{{scylla_login}}"
+  roles:
+    - { role: cassandra-ycsb-prepare }
+
+- name: YCSB Prepare
+  hosts: "Cassandra:!Stopped"
+  user: "{{cassandra_login}}"
+  roles:
+    - { role: cassandra-ycsb-prepare }
 
 - name: Run stress
   hosts: "CassandraLoadgen"
@@ -9,8 +19,10 @@
   vars:
     iteration: 0 # overload me
     server: "Scylla"
+
   tasks:
-    - include_vars: group_vars/cassandra_stress_vars.yaml
+
+    - include_vars: group_vars/ycsb_vars.yaml
 
     - name: Gather facts
       action: ec2_facts
@@ -59,24 +71,18 @@
 
     - set_fact: log_file="{{remote_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}"
 
-    - name: run cassandra-stress withe one insert to create the table
-      shell: cassandra-stress write n=1 no-warmup -node {{ip_list}} -rate threads=1  {{stress_options}}
-      when: profile_file is undefined
+    - name: YCSB prepere
+      shell: ~/ycsb/bin/ycsb load cassandra2-cql -P ~/ycsb/workloads/{{workload}} -p hosts={{ip_list}} {{prepere_options}}
+      when: prepare
       run_once: true
 
-    - name: run stress for seq populate
-      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress write no-warmup {{command_options}} -pop seq={{range}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
-      when: profile_file is undefined and seq_populate is defined
+    - name: YCSB run
+      shell: ~/ycsb/bin/ycsb run cassandra2-cql -P ~/ycsb/workloads/{{workload}} -s -threads {{threads}} -p hosts={{ip_list}} {{run_options}} > {{log_file}}.{{iteration}}.data
+      when: seq_populate is undefined
 
-    - name: run stress
-      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} no-warmup {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
-      when: profile_file is undefined and seq_populate is undefined
-      ignore_errors: True
-
-    - name: run stress with profile
-      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress user profile={{profile_file}} no-warmup {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
-      when: profile_file is defined
-      ignore_errors: True
+    - name: YCSB run
+      shell: ~/ycsb/bin/ycsb run cassandra2-cql -P ~/ycsb/workloads/{{workload}} -s -threads {{threads}} -p hosts={{ip_list}} -p insertstart={{range_start}} -p insertcount={{seq_populate}} {{run_options}} > {{log_file}}.{{iteration}}.data
+      when: seq_populate is defined
 
     - fetch: src={{log_file}}.{{iteration}}.data dest={{home_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}.{{iteration}}.data flat=yes
       ignore_errors: True

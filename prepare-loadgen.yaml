@@ -2,4 +2,5 @@
   hosts: CassandraLoadgen
   user: "{{loader_login}}"
   roles:
-     - { role: loader }
+     - { role: loader, when: not ycsb | bool }
+     - { role: loader-ycsb, when: ycsb | bool }
