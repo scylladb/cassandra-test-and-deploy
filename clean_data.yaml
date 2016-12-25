@@ -10,7 +10,6 @@
 - name: Restart Cassandra Service - one by one
   hosts: "Cassandra:!Stopped"
   user: "{{cassandra_login}}"
-  serial: 1
   tasks:
     - { include: roles/cassandra-config/tasks/start.yaml, when: server == "Cassandra" and  clean_data | bool }
 
@@ -25,7 +24,6 @@
 - name: Restart Scylla Service - one by one
   hosts: "Scylla:!Stopped"
   user: "{{scylla_login}}"
-  serial: 1
   tasks:
     - { include: roles/scylla-config/tasks/start.yaml, when: server == "Scylla" and clean_data | bool }
 
