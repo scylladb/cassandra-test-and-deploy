@@ -3,6 +3,7 @@
   hosts: localhost
   connection: local
   tasks:
+    - include_vars: group_vars/cassandra_stress_vars.yaml
 
     - shell: ./sum-results.sh {{home_path}}{{output_format}}
     - shell: ./avg-from-sum.sh {{home_path}}{{output_format}}
