@@ -94,7 +94,7 @@ Make sure to set one of the VPC subnet IDs on inventories/ec2/group_vars/all.yam
 You only need to run this once. Once security group exists, there is no need to repeat this step. You can use a different security group by adding ```-e "security_group=your_group_name"``` option to all ec2-setup-* scripts below.
 
 #### Launch Scylla cluster
-Scylla servers launch from Scylla AMI, base on Fedora 22 (login fedora)
+Scylla servers launch from Scylla AMI, base on CentOS 7 (login centos)
 
 ```
 ./ec2-setup-scylla.sh <options>
@@ -123,7 +123,7 @@ Cassandra servers launch from AMI, base on Ubuntu 14 (login ubuntu)
 Server are created with EC2 name *DB*, and tag "server=Cassandra"
 
 #### Launch Loaders
-Loaders are launch from Scylla AMI, base on Fedora 22 (login fedora), including a version of cassandra-stress which only use CQL, not thrift.
+Loaders are launch from Scylla AMI, base on CentOS 7 (login centos), including a version of cassandra-stress which only use CQL, not thrift.
 
 ```
 ./ec2-setup-loadgen.sh <options>
