@@ -14,4 +14,4 @@
         region:  "{{item.value.region_name}}"
         key_material: "{{ material }}"
         state: present
-      with_dict: use_regions
+      with_dict:  "{{use_regions}}"

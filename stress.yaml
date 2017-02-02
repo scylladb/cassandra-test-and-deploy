@@ -32,7 +32,7 @@
         user_group: "tag_user_{{setup_name}}"
 
     - debug: msg="{{ hostvars[item].ec2_private_ip_address }}"
-      with_items: groups.DB | intersect (groups[ec2_region]) | intersect (groups[user_group]) | intersect (groups[server]) | difference(groups.Stopped)
+      with_items: "{{groups.DB | intersect (groups[ec2_region]) | intersect (groups[user_group]) | intersect (groups[server]) | difference(groups.Stopped)}}"
       register: output
 
     - set_fact: ip_list={{ output.results|map(attribute='msg') | join(',') }}
