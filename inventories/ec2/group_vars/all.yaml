@@ -3,16 +3,16 @@
 regions:
   us-west-2 :
     region_name: us-west-2
-    cassandra_ami: ami-1cff962c # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-49ab2529  # Scylla 1.6.2
+    cassandra_ami: ami-373e2b07 # DataStax Auto-Clustering AMI 2.6.3-hvm
+    scylla_ami: ami-77e78617  # Scylla 1.7
     ubuntu_image: ami-3f68640f # ubuntu 14.04
     loader_ami: ami-d2c924b2 # centos 7.2
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-5207ee37
   us-east-1:
     region_name: us-east-1
-    cassandra_ami: ami-ada2b6c4 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-5ba00c4d  # Scylla 1.6.2
+    cassandra_ami: ami-59ff4332 # DataStax Auto-Clustering AMI 2.6.3
+    scylla_ami: ami-40a0e756 # Scylla 1.7
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     loader_ami: ami-6d1c2007 # centos 7.2
     security_group: cassandra-security-group # make sure security group is corralte to vpc
@@ -20,7 +20,7 @@ regions:
   us-west-1:
     region_name: us-west-1
     cassandra_ami: ami-3cf7c979 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-15f2ab75  # Scylla 1.6.2
+    scylla_ami: ami-76755516  # Scylla 1.7
     loader_ami: ami-af4333cf # centos 7.2
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-10a04c75
