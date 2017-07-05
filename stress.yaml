@@ -65,16 +65,16 @@
       run_once: true
 
     - name: run stress for seq populate
-      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress write no-warmup {{command_options}} -pop seq={{range}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
+      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress write no-warmup {{command_options}} -pop seq={{range}} -node {{ip_list}} -rate {{rate}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
       when: profile_file is undefined and seq_populate is defined
 
     - name: run stress
-      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} no-warmup {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
+      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress {{command}} no-warmup {{command_options}} -node {{ip_list}} -rate {{rate}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
       when: profile_file is undefined and seq_populate is undefined
       ignore_errors: True
 
     - name: run stress with profile
-      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress user profile={{profile_file}} no-warmup {{command_options}} -node {{ip_list}} -rate threads={{threads}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
+      shell: sleep {{sleep_between_runs}}; {{taskset}} cassandra-stress user profile={{profile_file}} no-warmup {{command_options}} -node {{ip_list}} -rate {{rate}} -log file={{log_file}}.{{iteration}}.data {{stress_options}}
       when: profile_file is defined
       ignore_errors: True
 
