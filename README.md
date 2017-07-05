@@ -178,7 +178,7 @@ notation. Examples below:
 * ```-e "stress_options='-errors ignore'"```
 * ```-e "command_options='cl=LOCAL_ONE -mode native cql3'"```
 * ```-e "command_options=duration=60m"```
-* ```-e "threads=200"```
+* ```-e "rate='threads=200'"```
 * ```-e "profile_dir=/tmp/cassandra-stress-profiles/" -e "profile_file=cust_a/users/users1.yaml" -e "command_options=ops\\(insert=1\\)"```
 * ```-e "clean_data=true"``` - clean all data from DB servers and restart them before starting the stress
 * ```-e "seq_populate=100"``` - populate different range per loader, using `-pop seq=1..100`,  `-pop seq=101..200` etc

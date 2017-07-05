@@ -6,6 +6,6 @@ output_file: "{{output_format}}"
 stress_options:
 populate: 1000000
 
-threads: 250
+rate: "threads=250"
 
 profile_dir: /tmp/cassandra-stress-profiles/
