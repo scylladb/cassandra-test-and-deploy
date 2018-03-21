@@ -1,7 +1,7 @@
 ---
 - name: start cassandra service
   action: service name=cassandra enabled=yes pattern=cassandra state=restarted
-  sudo: yes
+  become: true
 - name: Gather facts
   action: ec2_facts
 

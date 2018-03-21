@@ -5,7 +5,7 @@
   tasks:
     - include_vars: roles/cassandra-config/vars/main.yaml
       when: server == "Cassandra" and clean_data | bool
-    - { include: roles/cassandra-config/tasks/clean.yaml, sudo: yes , when: server == "Cassandra" and clean_data | bool }
+    - { include: roles/cassandra-config/tasks/clean.yaml, become: true , when: server == "Cassandra" and clean_data | bool }
 
 - name: Restart Cassandra Service - one by one
   hosts: "Cassandra:!Stopped"
@@ -19,7 +19,7 @@
   tasks:
     - include_vars: roles/scylla-config/vars/main.yaml
       when: server == "Scylla" and clean_data | bool
-    - { include: roles/scylla-config/tasks/clean.yaml, sudo: yes , when: server == "Scylla" and clean_data | bool }
+    - { include: roles/scylla-config/tasks/clean.yaml, become: true , when: server == "Scylla" and clean_data | bool }
 
 - name: Restart Scylla Service - one by one
   hosts: "Scylla:!Stopped"

@@ -1,6 +1,6 @@
 ---
 - service: name=cassandra enabled=yes pattern=cassandra state=stopped
-  sudo: yes
+  become: true
 - name: Gather facts
   action: ec2_facts
 
@@ -11,4 +11,4 @@
     tags:
       stopped: "true"
 
-- { include: clean.yaml, sudo: yes , when: clean_data == 'true' }
+- { include: clean.yaml, become: true , when: clean_data == 'true' }
