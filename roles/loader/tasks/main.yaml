@@ -4,15 +4,16 @@
 
 - name: Install prerequisites
   yum: name={{ item }}
-  sudo: yes
+  become: true
   with_items:
      - wget
      - epel-release
 
 - name: update repo
   get_url: url=http://downloads.scylladb.com/rpm/centos/scylla-{{scylla_tools_version}}.repo dest=/etc/yum.repos.d/scylla.repo owner=root group=root
-  sudo: yes
+  become: true
 
 - name: Install Scylla
   yum: name=scylla-tools
-  sudo: yes
+  become: true
+

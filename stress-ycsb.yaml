@@ -62,11 +62,11 @@
 
     - shell: for irq in `cat  /proc/interrupts | grep eth0 | cut -d":" -f1`; do echo 1 > /proc/irq/$irq/smp_affinity; done
       when: load_cpus is defined
-      sudo: yes
+      become: true
 
     - name: kill java, if already running
       shell: pkill java
-      sudo: yes
+      become: true
       ignore_errors: True
 
     - set_fact: log_file="{{remote_path}}{{output_file}}.{{ec2_region}}.{{loader_ip}}"

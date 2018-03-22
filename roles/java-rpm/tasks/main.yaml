@@ -2,16 +2,16 @@
 
 - name: Install prerequisites
   yum: name={{ item }}
-  sudo: yes
+  become: true
   with_items:
      - wget
 
 - name: Download Java RPM
-  sudo: yes
+  become: true
   command: "wget -q -O {{oracle_java_path}} --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' {{oracle_java_rpm_url}} creates={{ oracle_java_path }}"
 
 - name: install RPM
-  sudo: yes
+  become: true
   action: "{{ ansible_pkg_mgr }} name={{ oracle_java_path }} state=present"
 
 - name: set Java version as default
@@ -24,4 +24,4 @@
     - { path: "{{ oracle_java_home }}/jre/bin", exe: 'keytool' }
     - { path: "{{ oracle_java_home }}/bin", exe: 'javac' }
     - { path: "{{ oracle_java_home }}/bin", exe: 'javadoc' }
-  sudo: yes
+  become: true

@@ -1,7 +1,7 @@
 ---
 - name: start scylla service
   action: service name=scylla-server enabled=yes state=restarted
-  sudo: yes
+  become: true
 
 - name: wait for scylla service to complete its init procedures
   wait_for: host={{ansible_all_ipv4_addresses[0]}} port=9042 timeout=600
