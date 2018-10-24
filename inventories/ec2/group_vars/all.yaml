@@ -4,7 +4,7 @@ regions:
   us-west-2 :
     region_name: us-west-2
     cassandra_ami: ami-373e2b07 # DataStax Auto-Clustering AMI 2.6.3-hvm
-    scylla_ami: ami-984ec1e0 # 2.1
+    scylla_ami: ami-0da599147b1d9e80d # 2.3.0
     ubuntu_image: ami-3f68640f # ubuntu 14.04
     loader_ami: ami-d2c924b2 # centos 7.2
     security_group: cassandra-security-group # make sure security group is corralte to vpc
@@ -12,7 +12,7 @@ regions:
   us-east-1:
     region_name: us-east-1
     cassandra_ami: ami-59ff4332 # DataStax Auto-Clustering AMI 2.6.3
-    scylla_ami: ami-5bb55626 #    2.1
+    scylla_ami: ami-0fc423ac17a75570d #    2.3.0
     ubuntu_image: ami-d05e75b8 # ubuntu 14.04
     loader_ami: ami-6d1c2007 # centos 7.2
     security_group: cassandra-security-group # make sure security group is corralte to vpc
@@ -20,7 +20,7 @@ regions:
   us-west-1:
     region_name: us-west-1
     cassandra_ami: ami-3cf7c979 # DataStax Auto-Clustering AMI 2.5.1-hvm
-    scylla_ami: ami-4af2fa2a  # Scylla 2.1
+    scylla_ami: ami-041bdb53fc44f854b  # Scylla 2.3.0
     loader_ami: ami-af4333cf # centos 7.2
     security_group: cassandra-security-group # make sure security group is corralte to vpc
     vpc_subnet_id: subnet-10a04c75
@@ -38,8 +38,7 @@ cassandra_login: ubuntu
 scylla_login: centos
 loader_login: centos
 
-instance_type: i2.xlarge
+instance_type: i3.4xlarge
 
 setup_name: "{{ansible_env.ANSIBLE_EC2_PREFIX}}"
-
 
